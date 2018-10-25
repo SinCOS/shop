@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('address');
+            $table->unsignedInteger('shop_id');
             $table->decimal('total_amount');
             $table->text('remark')->nullable();
             $table->dateTime('paid_at')->nullable();

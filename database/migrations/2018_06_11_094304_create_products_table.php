@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description');
+             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->string('image');
             $table->boolean('on_sale')->default(true);
             $table->float('rating')->default(5);
