@@ -16,6 +16,7 @@ class CreateShopTable extends Migration
         Schema::create('shop', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->unsignInteger('user_id');
              $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('background_image',255);
@@ -28,6 +29,10 @@ class CreateShopTable extends Migration
             $table->string('note',255);
             $table->float('serve_rating')->default(5);
             $table->float('speed_rating')->default(5);
+            $table->string('area');
+            $table->unsignInteger('agent_id')->comment('市级代理');
+            $table->unsignInteger('work_id')->comment('业务员');
+            
         });
     }
 

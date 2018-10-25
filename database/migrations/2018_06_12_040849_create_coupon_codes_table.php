@@ -17,6 +17,8 @@ class CreateCouponCodesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('code')->unique();
+            $table->unsignedInteger('shop_id')->defalut(0);
+
             $table->string('type');
             $table->decimal('value');
             $table->unsignedInteger('total');
