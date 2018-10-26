@@ -18,12 +18,12 @@ use Illuminate\Routing\Router;
 // });
 Route::group([
     'prefix'        => 'v1',
-    'namespace'     => 'App\Http\Controllers\Api',
-    'middleware'    => 'auth:api',
+    'namespace'     => '\Api',
+    // 'middleware'    => 'auth:api',
 ],function(Router $router){
     $router->resource('/auth/user','UsersController');
     $router->resource('/cart','CartController');
-    $router->get('/shop/{id}','ShopController@index');
+    $router->get('/shop/{id}','ShopController@show');
     $router->get('/shop/{$id}/categorys','ShopController@category');
     $router->get('/category/{$id}/product','Category@show');
     

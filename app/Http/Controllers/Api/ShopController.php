@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
 use App\Http\Resources\Shops;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ShopController extends Controller
 {
     /**
@@ -15,7 +16,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        //
+        return [];
     }
 
     /**
@@ -47,8 +48,15 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        Shop::findorFail($id);
-        return new Shops(Shop::find($id));
+        // return response()->json(['msg' => 'ok','data' => ['sss']]);
+        try {
+             Shop::findorFail($id);
+              return new Shops(Shop::find($id));
+        } catch (ModelNotFoundException $e) {
+            return  response()->json(['msg'=>'店铺不存在'],404);
+        }
+       
+       
     }
 
     /**
