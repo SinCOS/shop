@@ -30,8 +30,8 @@ class CreateShopTable extends Migration
             $table->float('serve_rating')->default(5);
             $table->float('speed_rating')->default(5);
             $table->string('area');
-            $table->unsignInteger('agent_id')->comment('市级代理');
-            $table->unsignInteger('work_id')->comment('业务员');
+            $table->unsignedInteger('agent_id')->comment('市级代理');
+            $table->unsignedInteger('work_id')->comment('业务员');
             
         });
     }
