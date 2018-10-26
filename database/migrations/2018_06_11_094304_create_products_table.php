@@ -36,6 +36,9 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::table('products',function($table){
+            $table->dropForeign('shop_id');
+        });
         Schema::dropIfExists('products');
     }
 }
