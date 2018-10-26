@@ -16,7 +16,7 @@ class CreateShopTable extends Migration
         Schema::create('shop', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->unsignInteger('user_id');
+            $table->unsignedInteger('user_id');
              $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('background_image',255);
