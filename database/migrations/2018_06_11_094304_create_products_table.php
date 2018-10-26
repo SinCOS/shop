@@ -18,7 +18,6 @@ class CreateProductsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->unsignedInteger('shop_id');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->string('image');
             $table->boolean('on_sale')->default(true);
             $table->float('rating')->default(5);
@@ -36,9 +35,7 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::table('products',function($table){
-            $table->dropForeign('shop_id');
-        });
+       
         Schema::dropIfExists('products');
     }
 }
