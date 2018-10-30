@@ -8,8 +8,11 @@
  * @param int    $height
  * @return string
  */
-function imageUrl(string $url, string $disk = 'public', int $width = 50, int $height = 50) : string
+function imageUrl($url, string $disk = 'public', int $width = 50, int $height = 50) : string
 {
+    if($url == null){
+        return '';
+    }
     static $driver  = null;
     if (is_null($driver)) {
         $driver = Storage::disk($disk);

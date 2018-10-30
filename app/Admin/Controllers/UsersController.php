@@ -84,7 +84,9 @@ class UsersController extends Controller
     protected function grid()
     {
         $grid = new Grid(new User);
-
+        $grid->filter(function($filter){
+            $filter->equal('mobile','手机号码')->mobile();
+        });
         // 排序最新的
         $grid->model()->latest();
 

@@ -37,7 +37,7 @@ class CategoryController extends Controller
 
                     // $tree->disableCreate();
 
-                    $tree->nestable(['maxDepth' => 2])
+                    $tree->nestable(['maxDepth' => 1])
                          ->branch(function ($branch) {
 
                              $icon = "<i class='fa {$branch['icon']}'></i>";
@@ -54,6 +54,11 @@ class CategoryController extends Controller
                     $form->text('title', '分类名')->rules('required|unique:categories,title');
                     $form->icon('icon', '图标')->default('fa-bars')->rules('required');
                     $form->image('thumb', '缩略图')->uniqueName()->rules('required');
+                    $form->select('type','类型')->options([
+                        '0' => '正常',
+                        '1' => '核销',
+                        '2' => '其他'
+                    ]);
                     $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box('新增', $form))->style('success'));
@@ -128,6 +133,11 @@ class CategoryController extends Controller
         $form->text('title', '分类名');
         $form->icon('icon', '图标');
         $form->image('thumb', '缩略图');
+         $form->select('type','类型')->options([
+                        '0' => '正常',
+                        '1' => '核销',
+                        '2' => '其他'
+                    ]);
         $form->text('description', '描述');
 
         return $form;

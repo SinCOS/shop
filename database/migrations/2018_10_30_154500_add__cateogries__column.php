@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddShopsColumn extends Migration
+class AddCateogriesColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddShopsColumn extends Migration
      */
     public function up()
     {
-        // Schema::table('shop', function (Blueprint $table) {
-        //     $table->unsignedInteger('cat_id');
-        //     $table->foreign('cat_id')->references('id')->on('categories')->onDelete('cascade');
-        // });
+         Schema::table('categories', function (Blueprint $table) {
+            $table->boolean('type')->default(0)->after('thumb');
+        });
     }
 
     /**
