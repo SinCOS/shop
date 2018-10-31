@@ -95,7 +95,8 @@ class ShopsController extends Controller {
 		$grid->user_id('管理用户');
 		$grid->title('店铺名');
         $grid->logo('Logo')->display(function($url){
-            return imageUrl($url);
+            // return \imageUrl($url);
+            return '';
         });
         $grid->cat_id('Cat id');
 		// $grid->background_image('Background image');

@@ -3,7 +3,9 @@
 use Illuminate\Routing\Router;
 
 Admin::registerAuthRoutes();
-
+Route::group(['domain' => 'hjt.lxrs.net','namespace' => config('admin.route.namespace'),'middleware'    => config('admin.route.middleware')],function(Router $router){
+     $router->resource('shops','ShopsController');
+});
 Route::group([
     'domain' => 'business.lxrs.net',
     'prefix'        => config('admin.route.prefix'),
@@ -14,6 +16,9 @@ Route::group([
     $router->resource('users', 'UsersController');
      $router->resource('category', 'CategoryController');
      $router->resource('shops','ShopsController');
+
+      $router->get('auth/login', 'AuthController@getLogin');
+ $router->post('auth/login', 'AuthController@postLogin');
     $router->get('products', 'ProductsController@index');
     $router->get('products/create', 'ProductsController@create');
     $router->post('products', 'ProductsController@store');
@@ -29,4 +34,7 @@ Route::group([
     $router->get('coupon_codes/{id}/edit', 'CouponCodesController@edit');
     $router->put('coupon_codes/{id}', 'CouponCodesController@update');
     $router->delete('coupon_codes/{id}', 'CouponCodesController@destroy');
+
+
+    $router->post('upload/editor', 'UploadController@uploadByEditor');
 });

@@ -47,7 +47,12 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
+        'admin' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'visibility' => 'public',
+            'url' => 'business.lxrs.net' .  '/uploads'
+        ],
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
