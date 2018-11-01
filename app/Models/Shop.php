@@ -21,4 +21,14 @@ class Shop extends Model
         'contcat_people', 
         'speed_rating' //速度评分
     ];
+    // protected $casts = [
+    //     'area' => 'json'
+    // ];
+    public function getAreaAttribute($author)
+{
+    return json_decode($author, true);
+}
+    public function setAreaAttribute($val){
+        $this->attributes['area'] = json_encode($val);
+    }
 }

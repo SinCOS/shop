@@ -149,11 +149,12 @@ class ShopsController extends Controller {
 		$show->note('Note');
 		$show->serve_rating('服务评分');
 		$show->speed_rating('速度评分');
-		$show->area('Area');
-		$show->agent_id('市级代理');
+		$show->agent_id('代理');
 		$show->work_id('业务员');
 		$show->updated_at('最后更新');
-
+        $show->column('area')->as(function($val){
+            return var_export($val,1);
+        });
 		return $show;
 	}
 
@@ -189,12 +190,15 @@ class ShopsController extends Controller {
                 
                 
         });
-        
+    
+//JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX
 
-	
-		$form->text('title', 'Title');
+       
+	   
+
+		$form->text('title', '店铺名称');
 		$form->image('background_image', '背景图片')->uniqueName();
-		$form->switch('status', 'Status');
+		$form->switch('status', '状态');
 		$form->text('concat_phone', '联系电话');
 		$form->text('address', 'Address');
 		$form->text('contcat_people', '联系人');
@@ -206,13 +210,19 @@ class ShopsController extends Controller {
 		
 		$form->rate('serve_rating', '服务评分')->default(5.00);
 		$form->rate('speed_rating', '速度评分')->default(5.00);
-		$form->text('area', 'Area');
 		$form->display('agent_id', '市级代理');
 		$form->display('work_id', '业务员');
 		$form->display('cat_id', '店铺所属分类')->with(function($cat_id){
             return \App\Models\Category::find($cat_id)->title;
         });
-
+         $form->embeds('area','地理信息',function( $form){
+              $form->diymap('lat','lgt','经纬度');
+        //    $form->text('abc','123');
+        // //    $form->saving(function($form){
+        // //     $form->model()->lat = request()->get('abc');
+        // // });
+           
+        });
 		return $form;
 	}
 }

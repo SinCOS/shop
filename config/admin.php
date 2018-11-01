@@ -12,7 +12,7 @@ return [
     |
     */
     'name' => 'Laravel-admin',
-
+    'locale' =>'zh_CN',
     /*
     |--------------------------------------------------------------------------
     | Laravel-admin logo
@@ -211,7 +211,8 @@ return [
     | Supported: "tencent", "google", "yandex".
     |
     */
-    'map_provider' => 'google',
+    'map_provider' => 'tencent',
+    'tencent_api_key' => 'JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX',
 
     /*
     |--------------------------------------------------------------------------
