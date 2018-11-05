@@ -327,6 +327,16 @@ return [
         
             // 如果要关掉这个扩展，设置为false
             'enable' => true,
+        ],
+        'daterangepicker' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+            
+            // Find more configurations http://www.daterangepicker.com/
+            'config' => [
+            
+            ]
         ]
     ],
 ];
