@@ -10,13 +10,22 @@ class Category extends Model
 {
     use ModelTree, AdminBuilder;
     protected $table = 'categories';
-    public $timestamps =false;
-    protected $fillable = ['title', 'icon', 'parent_id', 'description', 'thumb'];
+    public $timestamps =true;
+    protected $fillable = ['title', 'icon', 'parent_id', 'description', 'thumb',];
+
+    public function __construct(array $attributes = []){
+    	$this->setParentColumn('parent_id');
+        $this->setOrderColumn('order');
+        $this->setTitleColumn('title');
+    }
      public function products()
     {
         return $this->hasMany(Product::class);
     }
 
+    public static function adminAll(){
+    	return self::query()->where('uid','=',0)->orderBy('order')->lastest()->get();
+    }
 
     public static function orderAll()
     {

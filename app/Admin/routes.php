@@ -14,11 +14,11 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->resource('users', 'UsersController');
-     $router->resource('category', 'CategoryController');
-     $router->resource('shops','ShopsController');
+    $router->resource('category', 'CategoryController');
+    $router->resource('shops','ShopsController');
 
-      $router->get('auth/login', 'AuthController@getLogin');
- $router->post('auth/login', 'AuthController@postLogin');
+    $router->get('auth/login', 'AuthController@getLogin');
+    $router->post('auth/login', 'AuthController@postLogin');
     $router->get('products', 'ProductsController@index');
     $router->get('products/create', 'ProductsController@create');
     $router->post('products', 'ProductsController@store');

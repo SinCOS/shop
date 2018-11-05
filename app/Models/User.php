@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'mobile', 'password', 'email_verified',
+        'name', 'mobile', 'password', 'email_verified','is_shop'
     ];
 
     /**
@@ -37,7 +37,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified' => 'boolean',
     ];
-
+    public function shop(){
+        return $this->hasOne(Shop::class);
+    }
     public function addresses()
     {
         return $this->hasMany(UserAddress::class);

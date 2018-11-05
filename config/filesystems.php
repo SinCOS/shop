@@ -51,7 +51,7 @@ return [
             'driver' => 'local',
             'root' => public_path('uploads'),
             'visibility' => 'public',
-            'url' => 'business.lxrs.net' .  '/uploads'
+            'url' => 'https://business.lxrs.net' .  '/uploads'
         ],
         'public' => [
             'driver' => 'local',

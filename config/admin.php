@@ -313,6 +313,20 @@ return [
     |
     */
     'extensions' => [
-
+     //    'star-rating' => [
+     
+     //     // set to false if you want to disable this extension
+     //     'enable' => true,
+         
+     //     // configuration
+     //     'config' => [
+     //         'min' => 1, 'max' => 5, 'step' => 1, 'size' => 'xs'
+     //     ]
+     // ]
+      'china-distpicker' => [
+        
+            // 如果要关掉这个扩展，设置为false
+            'enable' => true,
+        ]
     ],
 ];
