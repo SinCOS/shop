@@ -22,7 +22,7 @@ class ShopsController extends Controller {
 	 */
 	public function index(Content $content) {
 		return $content
-			->header('Index')
+			->header('商铺列表')
 			->description('description')
 			->body($this->grid());
 	}
@@ -76,7 +76,7 @@ class ShopsController extends Controller {
 	protected function grid() {
 		$grid = new Grid(new Shop);
 		$grid->filter(function ($filter) {
-			$filter->equal('status', '状态')->select(['0' => '待审核', '1' => '正在运营', '-1' => '已关闭']);
+			$filter->equal('status', '状态')->select(Shop::SHOP_STATUS);
 			$filter->like('title', '店铺名');
 			$filter->like('address', '地址');
 		});
@@ -93,21 +93,21 @@ class ShopsController extends Controller {
 			// $actions->disableView();
 		});
 		$grid->id('Id');
-
-		// $grid->updated_at('Updated at');
-		$grid->user_id('管理用户');
+		$grid->column('user.name','管理用户');
 		$grid->title('店铺名');
 		$grid->logo('Logo')->display(function ($url) {
-			// return \imageUrl($url);
-			return '';
+		
+			return imageUrl($url?:'','admin');
 		});
-		$grid->cat_id('商铺分类');
+		$grid->column('category.title','商铺分类');
 		// $grid->background_image('Background image');
-		$grid->status('状态')->option(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
-		$grid->concat_phone('联系电话');
-		$grid->address('地址');
+		$grid->status('状态')->display(function($status){
+            $msg = Shop::SHOP_STATUS[$status] ?:'未知';
+            return "<span class='alert-info'>{$msg}</span>";
+        });
 		$grid->contcat_people('联系人');
-
+        $grid->concat_phone('联系电话');
+		// $grid->address('地址');
 		$grid->money('Money');
 		// $grid->note('Note');
 		$grid->serve_rating('服务评分');
@@ -115,7 +115,6 @@ class ShopsController extends Controller {
 		// $grid->area('Area');
 		// $grid->agent_id('Agent id');
 		// $grid->work_id('Work id');
-
 		$grid->created_at('创建时间');
 		return $grid;
 	}

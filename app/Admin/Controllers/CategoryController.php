@@ -42,7 +42,7 @@ class CategoryController extends Controller
 
                              $icon = "<i class='fa {$branch['icon']}'></i>";
 
-                             return $icon . ' ' . $branch['title'];
+                             return $icon . " {$branch['id']} " . $branch['title'];
                          });
                 }));
 

@@ -16,7 +16,8 @@ Route::group([
     $router->resource('users', 'UsersController');
     $router->resource('category', 'CategoryController');
     $router->resource('shops','ShopsController');
-
+    $router->resource('videos','VideoController');
+    $router->resource('banners','BannerController');
     $router->get('auth/login', 'AuthController@getLogin');
     $router->post('auth/login', 'AuthController@postLogin');
     $router->get('products', 'ProductsController@index');

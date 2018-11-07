@@ -14,7 +14,18 @@ class Shop extends Model
         self::SHOP_USER_TYPE_NORMAL => '一般用户',
         self::SHOP_USRR_TYPE_MAN => '自然人'
     ];
-    
+    const SHOP_STATUS_APPLY = 0 ;//申请
+    const SHOP_STATUS_APPLY_FAIL = -1;//失败
+    const SHOP_STATUS_NORMAL = 1;//正常
+    const SHOP_STATUS_SUSPEED =2 ;//暂时休息 
+    const SHOP_STATUS_CLOSED = -2 ;//关闭
+    const SHOP_STATUS = [
+        self::SHOP_STATUS_APPLY_FAIL =>'申请失败',
+        self::SHOP_STATUS_APPLY => '申请开业',
+        self::SHOP_STATUS_NORMAL => '正常营业',
+        self::SHOP_STATUS_SUSPEED => '暂停营业',
+        self::SHOP_STATUS_CLOSED => '店铺关闭'
+    ];
     protected $table ='shop';
     protected $fillabled = [
         'title',
