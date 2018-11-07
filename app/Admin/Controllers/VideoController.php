@@ -137,7 +137,7 @@ class VideoController extends Controller
     {
         $form = new Form(new Video);
         $form->text('title','标题')->rules('required|min:6');
-        $form->image('thumb','预览图')->uniqueName()->rules('required');
+        $form->image('thumb','预览图')->uniqueName()->rules('required|image');
 
         $form->display('user.name','用户');
         $form->select('category_id','分类')->options(Category::videoAll())->rules('required');
