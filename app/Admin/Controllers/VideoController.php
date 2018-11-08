@@ -98,7 +98,7 @@ class VideoController extends Controller
         $grid->column('link','链接')->link();
         $grid->column('user.name','用户');
         
-        $grid->status('状态')->editable('select',['0' =>'待审核','1'=>'审核通过']);
+        $grid->status('状态')->editable('select',Video::STATUS_MAP);
 
         $grid->disableExport();
         return $grid;
@@ -123,7 +123,7 @@ class VideoController extends Controller
         $show->field('link','链接')->link();
         $show->field('user.name','用户名');
         $show->status('状态')->as(function($status){
-            return $status ? '通过':'审核';
+            return Video::STATIS_MAP[$status] ?:'未知';
         });
         return $show;
     }

@@ -84,6 +84,7 @@ class BannerController extends Controller
         $grid->column('thumb','轮播图')->display(function($img){
             return imageUrl($img?:'','admin');
         });
+        // $grid->order('排序')->editable('text');
         $grid->not_before('开始时间');
         $grid->not_after('结束时间');
         $grid->enabled('是否启用')->display(function($true){
