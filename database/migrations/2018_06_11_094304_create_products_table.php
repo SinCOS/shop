@@ -15,8 +15,13 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('category_id');
             $table->string('title');
-            $table->text('description');
+            $table->text('body');
+            $table->unsignedInteger('max_buy')->default(0)->comment('单次最多购买');
+            $table->decimal('dispatchprice',10,2)->comment('运费');
+            $table->boolean('dispatchtype')->default(true)->comment('1 统一邮费 2 模板');
+            $table->unsignedInteger('dispatchid')->default(0);
             $table->unsignedInteger('shop_id');
             $table->string('image');
             $table->boolean('on_sale')->default(true);

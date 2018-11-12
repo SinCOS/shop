@@ -87,6 +87,17 @@ class UsersController extends Controller
         $grid->filter(function($filter){
             $filter->equal('mobile','手机号码')->mobile();
         });
+        $grid->actions(function($actions){
+            $actions->disableDelete();
+        });
+        $grid->disableExport();
+        $grid->disableCreation();
+        $grid->tools(function ($tools) {
+    //关闭批量删除
+    $tools->batch(function ($batch) {
+        $batch->disableDelete();
+    });
+});
         // 排序最新的
         $grid->model()->latest();
 
