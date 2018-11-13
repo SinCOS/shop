@@ -36,4 +36,20 @@ class UploadController extends Controller
 
         return ['errno' => 0, 'data' => $files];
     }
+    public function uploadByFileInput(UploadServe $uploadServe){
+        $disk = 'admin';
+        try {
+               $file = $uploadServe->setFileInput('thumb')
+                                 ->setMaxSize('10M')
+                                 ->setExtensions(['jpg', 'jpeg', 'png', 'bmp', 'gif'])
+                                 ->validate()
+                                 ->storeMulti('products/lists/'.date('Y-m-d'), compact('disk'));
+                                 // dd($file);
+            $path =  Storage::disk($disk)->url($file[0]);
+           
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage(), 'path' => NULL];
+        }
+        return ['error' => NULL, 'path' => $path];
+    }
 }

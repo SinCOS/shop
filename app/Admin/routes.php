@@ -38,4 +38,5 @@ Route::group([
 
 
     $router->post('upload/editor', 'UploadController@uploadByEditor');
+    $router->post('upload/file-input', 'UploadController@uploadByFileInput')->name('upload.file-input');
 });

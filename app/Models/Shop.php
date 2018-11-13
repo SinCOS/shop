@@ -59,7 +59,10 @@ class Shop extends Model
         return $this->belongsTo(Category::class,'cat_id','id');
     }
     public function setThumbAttribute($val){
-        $this->attributes['thumb'] = json_encode($val);
+        if(is_array($val)){
+             $this->attributes['thumb'] = json_encode($val);
+        }
+       
     }
     public function setAreaAttribute($val){
         $this->attributes['area'] = json_encode($val);

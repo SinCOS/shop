@@ -32,20 +32,21 @@ class Order extends Model
     ];
 
     protected $fillable = [
-        'no',
-        'address',
-        'total_amount',
-        'remark',
-        'paid_at',
+        'no', //订单
+        'address', //地址json
+        'total_amount',//数量
+        'shop_id',
+        'remark',//备注
+        'paid_at',//支付时间
         'payment_method',
-        'payment_no',
-        'refund_status',
-        'refund_no',
-        'closed',
-        'reviewed',
-        'ship_status',
-        'ship_data',
-        'extra',
+        'payment_no',//支付编号
+        'refund_status',//退款状态
+        'refund_no',//退款单号
+        'closed',//关闭订单
+        'reviewed',//
+        'ship_status',//
+        'ship_data',//购物信息
+        'extra',//其他信
     ];
 
     protected $casts = [
