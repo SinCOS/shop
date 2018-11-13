@@ -1,7 +1,7 @@
 <?php
 
 Route::redirect('/', '/products')->name('root');
-Route::get('products', 'ProductsController@index')->name('products.index');
+Route::resource('banner', 'BannerController');
 
 Auth::routes();
 

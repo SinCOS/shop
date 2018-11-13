@@ -92,9 +92,10 @@ class VideoController extends Controller
         
         $grid->created_at('上传时间')->sortable();
         $grid->title('标题');
-        $grid->column('thumb','预览图')->display(function($img){
-            return "<a href='/uploads/{$img}' target='_blank'>" . imageUrl($img?:'','admin') . "</a>";
-        });
+        // $grid->column('thumb','预览图')->display(function($img){
+        //     return "<a href='/uploads/{$img}' target='_blank'>" . \imageUrl($img?:'','admin') . "</a>";
+        // });
+        $grid->column('thumb','预览图')->image(200,100);
         $grid->column('link','链接')->link();
         $grid->column('user.name','用户');
         

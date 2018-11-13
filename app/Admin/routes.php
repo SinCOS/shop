@@ -3,8 +3,17 @@
 use Illuminate\Routing\Router;
 
 Admin::registerAuthRoutes();
-Route::group(['domain' => 'hjt.lxrs.net','namespace' => config('admin.route.namespace'),'middleware'    => config('admin.route.middleware')],function(Router $router){
+Route::group(['domain' => 'hjt.lxrs.net','namespace' => config('admin.route.namespace'),],function(Router $router){
      $router->resource('shops','ShopsController');
+     $router->resource('videos','VideoController');
+});
+Route::group([
+    'domain' => 'business.lxrs.net',
+    'prefix' => '/api/v1',
+     'namespace'     => config('admin.route.namespace'),
+
+],function(Router $router){
+    $router->get('/tpl','TplController@show');
 });
 Route::group([
     'domain' => 'business.lxrs.net',
