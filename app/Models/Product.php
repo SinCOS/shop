@@ -4,10 +4,12 @@ namespace App\Models;
 use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
+    use SoftDeletes;
     protected $fillable = ['title', 'body', 'image', 'on_sale', 'rating', 'sold_count', 'review_count', 'price','thumb','max_buy','dispathid','dispathprice'];
+    protected $dates = ['delete_at'];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段
          // 'thumb' => 'json'

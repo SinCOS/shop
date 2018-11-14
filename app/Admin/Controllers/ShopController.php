@@ -56,97 +56,19 @@ class ShopController extends Controller
         $id =Shop::where('user_id','=',\Admin::user()->id)->value('id');
         // return $id;
         return $content
-            ->header('Edit')
-            ->description('description')
+            ->header('店铺设置')
+            ->description('请填写信息')
             ->body($this->form()->edit($id));
     }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     * @return Content
-     */
-    public function create(Content $content)
+     public function update()
     {
-        return $content
-            ->header('Create')
-            ->description('description')
-            ->body($this->form());
+        $id =Shop::where('user_id','=',\Admin::user()->id)->value('id');
+        return $this->form()->update($id);
     }
+   
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        $grid = new Grid(new Shop);
 
-        $grid->id('Id');
-        $grid->created_at('Created at');
-        $grid->updated_at('Updated at');
-        $grid->user_id('User id');
-        $grid->title('Title');
-        $grid->background_image('Background image');
-        $grid->status('Status');
-        $grid->concat_phone('Concat phone');
-        $grid->address('Address');
-        $grid->contcat_people('Contcat people');
-        $grid->logo('Logo');
-        $grid->money('Money');
-        $grid->note('Note');
-        $grid->serve_rating('Serve rating');
-        $grid->speed_rating('Speed rating');
-        $grid->area('Area');
-        $grid->agent_id('Agent id');
-        $grid->work_id('Work id');
-        $grid->type('Type');
-        $grid->thumb('Thumb');
-        $grid->province_id('Province id');
-        $grid->city_id('City id');
-        $grid->district_id('District id');
 
-        return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(Shop::findOrFail($id));
-
-        $show->id('Id');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
-        $show->user_id('User id');
-        $show->title('Title');
-        $show->background_image('Background image');
-        $show->status('Status');
-        $show->concat_phone('Concat phone');
-        $show->address('Address');
-        $show->contcat_people('Contcat people');
-        $show->logo('Logo');
-        $show->money('Money');
-        $show->note('Note');
-        $show->serve_rating('Serve rating');
-        $show->speed_rating('Speed rating');
-        $show->area('Area');
-        $show->agent_id('Agent id');
-        $show->work_id('Work id');
-        $show->type('Type');
-        $show->thumb('Thumb');
-        $show->province_id('Province id');
-        $show->city_id('City id');
-        $show->district_id('District id');
-
-        return $show;
-    }
 
     /**
      * Make a form builder.
@@ -157,21 +79,39 @@ class ShopController extends Controller
     {
         $form = new Form(new Shop);
 
+        $form->setAction('setting');
         $form->tools(function (Form\Tools $tools) {
 
             // // Disable `List` btn.
-            // $tools->disableList();
+            $tools->disableList();
 
             // Disable `Delete` btn.
             $tools->disableDelete();
 
             // // Disable `Veiw` btn.
-            // $tools->disableView();
+            $tools->disableView();
 
             // // Add a button, the argument can be a string, or an instance of the object that implements the Renderable or Htmlable interface
             // $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
         });
+        $form->footer(function ($footer) {
 
+    // 去掉`重置`按钮
+    $footer->disableReset();
+
+    // 去掉`提交`按钮
+    // $footer->disableSubmit();
+
+    // 去掉`查看`checkbox
+    $footer->disableViewCheck();
+
+    // 去掉`继续编辑`checkbox
+    $footer->disableEditingCheck();
+
+    // 去掉`继续创建`checkbox
+    $footer->disableCreatingCheck();
+
+});
         $form->display('user_id', '用户')->with(function ($user_id) {
             try {
                 $user = \App\Models\User::findOrFail($user_id);
@@ -223,6 +163,9 @@ class ShopController extends Controller
             $form->image('sfzf', '身份证反面照')->uniqueName();
             $form->image('yyzz', '营业执照正面照')->uniqueName();
         });
+        $form->saved(function (Form $form) {
+    return redirect(admin_base_path('setting'))->withErrors(admin_toastr('保存成功','success'));;
+});
         return $form;
 
       

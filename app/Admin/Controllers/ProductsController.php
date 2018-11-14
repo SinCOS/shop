@@ -126,6 +126,8 @@ class ProductsController extends Controller {
 				// });
 				// 创建一个富文本编辑器
 				// $form->editor('description', '商品描述')->rules('required');
+                $form->currency('price','销售价');
+                // $form->currency('price_on_app','平台价')->min(0.01)->rules('required|integer|min:0')->help('0 为不限制');
 				$form->number('max_buy', '用户单次最多购买')->min(0)->default(0)->rules('required|integer|min:0')->help('0 为不限制');
 
 				$form->radio('dispatchtype', '运费设置')->options(['1' => '统一邮费', '0' =>
@@ -424,9 +426,167 @@ TST;
 				$form->radio('is_verify', '适合核销')->options(['0' => '否', '1' => '是'])->default(0);
 			});
 			// 定义事件回调，当模型即将保存时会触发这个回调
-			$form->saving(function (Form $form) {
-				$form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
-			});
+			// $form->saving(function (Form $form) {
+			// 	// $form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
+
+
+			// });
+            $form->saved(function(Form $form){
+                $id = $form->model()->id;
+                        $spec_ids    = request()->input('spec_id');
+        $spec_titles = request()->input('spec_title');
+        $specids     = array();
+        $len         = count($spec_ids);
+        $specids     = array();
+        $spec_items  = array();
+        for ($k = 0; $k < $len; $k++) {
+            $spec_id     = "";
+            $get_spec_id = $spec_ids[$k];
+            $a           = array(
+                // "uniacid" => $_W['uniacid'],
+                "product_id" => $id,
+                // "displayorder" => $k,
+                "title" => $spec_titles[$get_spec_id]
+            );
+            if (is_numeric($get_spec_id)) {
+                \DB::table('product_spec')->where('id',$get_spec_id)->update($a);
+                // pdo_update("eshop_goods_spec", $a, array(
+                //     "id" => $get_spec_id
+                // ));
+                $spec_id = $get_spec_id;
+            } else {
+                // pdo_insert('eshop_goods_spec', $a);
+                $spec_id = \DB::table('product_spec')->insertGetId($a);
+            }
+            $spec_item_ids       = request()->input("spec_item_id_" . $get_spec_id);
+            $spec_item_titles    = request()->input("spec_item_title_" . $get_spec_id);
+            // $spec_item_shows     = request()->input("spec_item_show_" . $get_spec_id);
+            // $spec_item_thumbs    = request()->input("spec_item_thumb_" . $get_spec_id);
+            // $spec_item_oldthumbs = request()->input("spec_item_oldthumb_" . $get_spec_id);
+            // $spec_item_virtuals  = 0;
+            $itemlen             = count($spec_item_ids);
+            $itemids             = array();
+            for ($n = 0; $n < $itemlen; $n++) {
+                $item_id     = "";
+                $get_item_id = $spec_item_ids[$n];
+                $d   = array(
+                    "spec_id" => $spec_id,
+                    // "displayorder" => $n,
+                    "title" => $spec_item_titles[$n],
+                );
+                // $f = "spec_item_thumb_" . $get_item_id;
+                if (is_numeric($get_item_id)) {
+                    \DB::table('product_spec_item')->where('id',$get_item_id)->update($d);
+                    // pdo_update("eshop_goods_spec_item", $d, array(
+                    //     "id" => $get_item_id
+                    // ));
+                    $item_id = $get_item_id;
+                } else {
+                    // pdo_insert('eshop_goods_spec_item', $d);
+                    $item_id =  \DB::table('product_spec_item')->insertGetId($d);
+                }
+                $itemids[]    = $item_id;
+                $d['get_id']  = $get_item_id;
+                $d['id']      = $item_id;
+                $spec_items[] = $d;
+            }
+            if (count($itemids) > 0) {
+                \DB::table('product_spec_item')->where('spec_id',$spec_id)->whereNotIn('id',$itemids)->delete();
+                // pdo_query("delete from " . tablename('eshop_goods_spec_item') . " where uniacid={$_W['uniacid']} and specid=$spec_id and id not in (" . implode(",", $itemids) . ")");
+            } else {
+                \DB::table('product_spec_item')->where('spec_id',$spec_id)->delete();
+                // pdo_query('delete from ' . tablename('eshop_goods_spec_item') . " where uniacid={$_W['uniacid']} and specid=$spec_id");
+            }
+            \DB::table('product_spec')->where('id',$spec_id)->update(['content' => serialize($itemids)]);
+            // pdo_update('eshop_goods_spec', array(
+            //     'content' => serialize($itemids)
+            // ), array(
+            //     "id" => $spec_id
+            // ));
+            $specids[] = $spec_id;
+        }
+        if (count($specids) > 0) {
+            \DB::table('product_spec')->where('product_id',$id)->whereNotIn('id',$specids)->delete();
+            // pdo_query("delete from " . tablename('eshop_goods_spec') . " where uniacid={$_W['uniacid']} and goodsid=$id and id not in (" . implode(",", $specids) . ")");
+        } else {
+            \DB::table('product_spec')->where('product_id',$id)->delete();
+            // pdo_query('delete from ' . tablename('eshop_goods_spec') . " where uniacid={$_W['uniacid']} and goodsid=$id");
+                }
+
+        $option_idss          = request()->input('option_ids');
+        $option_productprices = request()->input('option_productprice');
+        $option_marketprices  = request()->input('option_marketprice');
+        $option_costprices    = request()->input('option_costprice');
+        $option_stocks        = request()->input('option_stock');
+        $option_weights       = request()->input('option_weight');
+        $option_goodssns      = request()->input('option_goodssn');
+        $option_productssns   = request()->input('option_productsn');
+        $len                  = count($option_idss);
+        $optionids            = array();
+        for ($k = 0; $k < $len; $k++) {
+            $option_id     = "";
+            $ids           = $option_idss[$k];
+            $get_option_id = request()->input('option_id_' . $ids)[0];
+            $idsarr        = explode("_", $ids);
+            $newids        = array();
+            foreach ($idsarr as $key => $ida) {
+                foreach ($spec_items as $it) {
+                    if ($it['get_id'] == $ida) {
+                        $newids[] = $it['id'];
+                        break;
+                    }
+                }
+            }
+            $newids = implode("_", $newids);
+            $a      = array(
+                "title" => request()->input('option_title_' . $ids)[0],
+                "price" => request()->input('option_productprice_' . $ids)[0],
+                "cost" => request()->input('option_costprice_' . $ids)[0],
+                "price_on_app" => request()->input('option_marketprice_' . $ids)[0],
+                "stock" => request()->input('option_stock_' . $ids)[0],
+                "weight" => request()->input('option_weight_' . $ids)[0],
+                // "goodssn" => request()->input('option_goodssn_' . $ids)[0],
+                "product_sn" => request()->input('option_productsn_' . $ids)[0],
+                "product_id" => $id,
+                "specs" => $newids,
+                // 'virtual' => $data['type'] == 3 ? $_GPC['option_virtual_' . $ids][0] : 0
+            );
+            //$totalstocks += $a['stock'];
+            if (empty($get_option_id)) {
+                // pdo_insert("eshop_goods_option", $a);
+                $option_id = \DB::table('product_skus')->insertGetId($a);
+            } else {
+                // pdo_update('eshop_goods_option', $a, array(
+                //     'id' => $get_option_id
+                // ));
+                \DB::table('product_skus')->where('id',$get_option_id)->update($a);
+                $option_id = $get_option_id;
+            }
+            $optionids[] = $option_id;
+        }
+        if (count($optionids) > 0) {
+            \DB::table('product_skus')->where('product_id',$id)->whereNotIn('id',$optionids)->delete();
+            // pdo_query("delete from " . tablename('eshop_goods_option') . " where goodsid=$id and id not in ( " . implode(',', $optionids) . ")");
+        } else {
+             \DB::table('product_skus')->where('product_id',$id)->delete();
+            // pdo_query('delete from ' . tablename('eshop_goods_option') . " where goodsid=$id");
+        }
+        // if ($data['type'] == 3 ) {
+        //     $pv->updateGoodsStock($id);
+        // } else {
+        //     if (($totalstocks > 0) && ($data['totalcnf'] != 2)) {
+        //         pdo_update("eshop_goods", array(
+        //             "total" => $totalstocks
+        //         ), array(
+        //             "id" => $id
+        //         ));
+        //     }
+        // }
+
+
+
+
+            });
 		});
 	}
 
