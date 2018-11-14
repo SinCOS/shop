@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Tenancy\Controllers;
 
 use Encore\Admin\Controllers\AuthController as BaseAuthController;
 use Illuminate\Http\Request;
+
+
+
 class AuthController extends BaseAuthController
 {
 	public function getLogin(){
 		if(!\Auth::guard('admin')->guest()){
 			return redirect(config('admin.router.prefix'));
 		}
-		return view('admin.login');
+		return view('shop.login');
 	}
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);
@@ -27,10 +30,10 @@ class AuthController extends BaseAuthController
 			admin_toastr(trans('admin.login_successful'));
 			return redirect()->intended(config('admin.router.prefix'));
 		}
-		return \Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
+		return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
 	}
 
 	protected function getFailedLoginMessage(){
-		return \Lang::has('auth.failed') ?trans('auth.failed') : '账号或密码不匹配';
+		return Lang::has('auth.failed') ?trans('auth.failed') : '账号或密码不匹配';
 	}
 }

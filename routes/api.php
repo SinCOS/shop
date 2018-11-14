@@ -16,15 +16,15 @@ use Illuminate\Routing\Router;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::group([
-    'prefix'        => 'v1',
-    'namespace'     => '\Api',
-    // 'middleware'    => 'auth:api',
-],function(Router $router){
-    $router->resource('/auth/user','UsersController');
-    $router->resource('/cart','CartController');
-    $router->get('/shop/{id}','ShopController@show');
-    $router->get('/shop/{$id}/categorys','ShopController@category');
-    $router->get('/category/{$id}/product','Category@show');
+// Route::group([
+//     'prefix'        => 'v1',
+//     'namespace'     => '\Api',
+//     // 'middleware'    => 'auth:api',
+// ],function(Router $router){
+//     $router->resource('/auth/user','UsersController');
+//     $router->resource('/cart','CartController');
+//     $router->get('/shop/{id}','ShopController@show');
+//     $router->get('/shop/{$id}/categorys','ShopController@category');
+//     $router->get('/category/{$id}/product','Category@show');
     
-});
+// });

@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Laravel-admin',
+    'name' => '商家后台管理',
     'locale' =>'zh_CN',
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Laravel</b> admin',
+    'logo' => '<b>商家</b> 后台',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,7 +152,7 @@ return [
         'connection' => '',
 
         // User tables and model.
-        'users_table' => 'admin_users',
+        'users_table' => 'users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
 
         // Role table and model.
@@ -323,6 +323,9 @@ return [
      //         'min' => 1, 'max' => 5, 'step' => 1, 'size' => 'xs'
      //     ]
      // ]
+    'multitenancy' => [
+            'tenancy' => config_path('tenancy.php'),
+        ],
       'china-distpicker' => [
         
             // 如果要关掉这个扩展，设置为false

@@ -34,9 +34,15 @@ class CategoryController extends Controller
 
                 // 只能在同一级排序拖动，不允许二级
                 $row->column(6, Category::tree(function (Tree $tree) {
-
+                    if(\Admin::user()->isRole('shop')){
+                        $shop_id = Admin::user()->shop()->id;
+                    }elseif (\Admin::user()->isAdministrator()) {
+                        $shop_id = 0;
+                    }
                     // $tree->disableCreate();
-
+                    $tree->query(function($model)use($shop_id){
+                        return $model->where('shop_id','=',$shop_id);
+                    });
                     $tree->nestable(['maxDepth' => 1])
                          ->branch(function ($branch) {
 

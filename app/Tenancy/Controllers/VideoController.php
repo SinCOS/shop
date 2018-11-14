@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Tenancy\Controllers;
 
 use App\Models\Video;
 use App\Models\Category;

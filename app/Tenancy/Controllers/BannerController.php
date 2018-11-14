@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Tenancy\Controllers;
 
 use App\Models\Banner;
 use App\Http\Controllers\Controller;
@@ -81,9 +81,7 @@ class BannerController extends Controller
     {
         $grid = new Grid(new Banner);
         $grid->name('活动名');
-        $grid->column('thumb','轮播图')->display(function($img){
-            return imageUrl($img?:'','admin');
-        });
+        $grid->column('thumb','轮播图')->image('uploads',100,80);
         // $grid->order('排序')->editable('text');
         $grid->not_before('开始时间');
         $grid->not_after('结束时间');

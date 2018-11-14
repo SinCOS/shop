@@ -28,6 +28,7 @@ class CreateCouponCodesTable extends Migration
             $table->datetime('not_after')->nullable();
             $table->boolean('enabled');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

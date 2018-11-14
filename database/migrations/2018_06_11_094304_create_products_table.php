@@ -33,6 +33,7 @@ class CreateProductsTable extends Migration
             $table->json('thumb')->nullable()->comment('副图');
             $table->boolean('has_sku')->default(0)->comment('是否有规格');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -1,12 +1,11 @@
 <?php
 
 use Illuminate\Routing\Router;
-
-Admin::registerAuthRoutes();
-Route::group(['domain' => 'hjt.lxrs.net','namespace' => config('admin.route.namespace'),],function(Router $router){
-     $router->resource('shops','ShopsController');
-     $router->resource('videos','VideoController');
+Route::group(['domain' => 'business.lxrs.net'], function () {
+    Admin::registerAuthRoutes();
 });
+Admin::registerAuthRoutes();
+
 Route::group([
     'domain' => 'business.lxrs.net',
     'prefix' => '/api/v1',
@@ -22,9 +21,9 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
-    $router->resource('users', 'UsersController');
+   
     $router->resource('category', 'CategoryController');
-    $router->resource('shops','ShopsController');
+    $router->get('setting','ShopController@edit');//->only('edit,show');
     $router->resource('videos','VideoController');
     $router->resource('banners','BannerController');
     $router->get('auth/login', 'AuthController@getLogin');
