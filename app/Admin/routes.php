@@ -2,8 +2,13 @@
 
 use Illuminate\Routing\Router;
 Route::group(['domain' => 'business.lxrs.net'], function () {
+
     Admin::registerAuthRoutes();
+    Route::get('/',function(){
+        return Redirect::to('/home');
 });
+});
+
 Admin::registerAuthRoutes();
 
 Route::group([
@@ -20,8 +25,8 @@ Route::group([
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
-    $router->get('/', 'HomeController@index');
-   
+    $router->get('/home', 'HomeController@index');
+
     $router->resource('category', 'CategoryController');
     $router->get('setting','ShopController@edit');//->only('edit,show');
     $router->put('setting','ShopController@update');
@@ -34,6 +39,7 @@ Route::group([
     $router->post('products', 'ProductsController@store');
     $router->get('products/{id}/edit', 'ProductsController@edit');
     $router->put('products/{id}', 'ProductsController@update');
+    $router->delete('products/{id}', 'ProductsController@destroy');
     $router->get('orders', 'OrdersController@index')->name('admin.orders.index');
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
     $router->post('orders/{order}/ship', 'OrdersController@ship')->name('admin.orders.ship');

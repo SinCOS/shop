@@ -63,8 +63,8 @@ class CouponCodesController extends Controller
     protected function grid()
     {
         return Admin::grid(CouponCode::class, function (Grid $grid) {
-            $grid->model()->orderBy('created_at', 'desc');
-            $grid->id('ID')->sortable();
+            $grid->model()->orderBy('created_at', 'desc')->where('shop_id',\Admin::user()->id);
+            // $grid->id('ID')->sortable();
             $grid->name('名称');
             $grid->code('优惠码');
             $grid->description('描述');
@@ -115,10 +115,11 @@ class CouponCodesController extends Controller
             $form->datetime('not_before', '开始时间');
             $form->datetime('not_after', '结束时间');
             $form->radio('enabled', '启用')->options(['1' => '是', '0' => '否']);
-
+            $form->hidden('shop_id')->default(\Admin::user()->shop_id)  ;
             $form->saving(function (Form $form) {
                 if (!$form->code) {
                     $form->code = CouponCode::findAvailableCode();
+
                 }
             });
         });

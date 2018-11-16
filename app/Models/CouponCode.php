@@ -9,6 +9,7 @@ use App\Exceptions\CouponCodeUnavailableException;
 
 class CouponCode extends Model
 {
+    use AdminActions;
     // 用常量的方式定义支持的优惠券类型
     const TYPE_FIXED = 'fixed';
     const TYPE_PERCENT = 'percent';
@@ -23,6 +24,7 @@ class CouponCode extends Model
         'code',
         'type',
         'value',
+        'shop_id',
         'total',
         'used',
         'min_amount',

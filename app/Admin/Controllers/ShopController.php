@@ -143,7 +143,8 @@ class ShopController extends Controller
         $form->rate('speed_rating', '速度评分')->default(5.00);
         $form->display('agent_id', '市级代理');
         $form->display('work_id', '业务员');
-        $form->select('cat_id', '店铺所属分类')->options(Category::selectOrderAll())->rules('required|exists:categories,id')->readOnly();
+        $form->display('category.title', '店铺所属分类');
+        //->options(Category::selectOrderAll())->rules('required|exists:categories,id')->readOnly();
         // $form->display('cat_id', '店铺所属分类')->with(function($cat_id){
         //           return \App\Models\Category::find($cat_id)->title;
         //       });

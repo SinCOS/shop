@@ -8,16 +8,18 @@ class AuthController extends BaseAuthController
 {
 	public function getLogin(){
 		if(!\Auth::guard('admin')->guest()){
-			return redirect(config('admin.router.prefix'));
+			return redirect('/home');
 		}
 		return view('admin.login');
 	}
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);
 		$validator = \Validator::make($credentials,[
-			'username' => 'required',
+			'username' => 'required|string|exists:users,username,shop_id,!0',
 			'password' => 'required',
 			'captcha' =>'required|captcha'
+		],[
+			'exists' => '不是商家'
 		]);
 		if($validator->fails()){
 			return \Redirect::back()->withInput()->withErrors($validator);
@@ -25,7 +27,7 @@ class AuthController extends BaseAuthController
 		unset($credentials['captcha']);
 		if(\Auth::guard('admin')->attempt($credentials)){
 			admin_toastr(trans('admin.login_successful'));
-			return redirect()->intended(config('admin.router.prefix'));
+			return redirect()->intended('/home');
 		}
 		return \Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
 	}

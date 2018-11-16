@@ -30,10 +30,10 @@ class AuthController extends BaseAuthController
 			admin_toastr(trans('admin.login_successful'));
 			return redirect()->intended(config('admin.router.prefix'));
 		}
-		return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
+		return \Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
 	}
 
 	protected function getFailedLoginMessage(){
-		return Lang::has('auth.failed') ?trans('auth.failed') : '账号或密码不匹配';
+		return \Lang::has('auth.failed') ?trans('auth.failed') : '账号或密码不匹配';
 	}
 }

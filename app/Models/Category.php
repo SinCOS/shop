@@ -11,7 +11,7 @@ class Category extends Model
     use ModelTree, AdminBuilder;
     protected $table = 'categories';
     public $timestamps =true;
-    protected $fillable = ['title', 'icon', 'parent_id', 'description', 'thumb',];
+    protected $fillable = ['title', 'icon', 'parent_id', 'description', 'thumb','shop_id'];
 
     public function __construct(array $attributes = []){
     	$this->setParentColumn('parent_id');
@@ -26,7 +26,7 @@ class Category extends Model
     	return self::query()->where('parent_id','=',10)->orderBy('order')->latest()->pluck('title', 'id');
     }
     public static function adminAll(){
-    	return self::query()->where('uid','=',0)->orderBy('order')->latest()->get();
+    	return self::query()->where('shop_id',0)->orderBy('order')->pluck('title','id');
     }
 
     public static function orderAll()

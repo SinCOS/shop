@@ -33,6 +33,7 @@ class ProductsController extends Controller {
 	 * @return Content
 	 */
 	public function edit($id) {
+       
 		return Admin::content(function (Content $content) use ($id) {
 			$content->header('编辑商品');
 			$content->body($this->form()->edit($id));
@@ -45,6 +46,7 @@ class ProductsController extends Controller {
 	 * @return Content
 	 */
 	public function create() {
+
 		return Admin::content(function (Content $content) {
 			$content->header('创建商品');
 			$content->body($this->form());
@@ -58,8 +60,11 @@ class ProductsController extends Controller {
 	 */
 	protected function grid() {
 		return Admin::grid(Product::class, function (Grid $grid) {
-			$grid->id('ID')->sortable();
-			$grid->column('category.title', '分类');
+			
+            $grid->model()->where('shop_id','=',\Admin::user()->shop_id);
+			$grid->product_ssn('产品SSN')->sortable();
+
+            $grid->column('category.title', '分类');
 			$grid->title('商品名称');
 			$grid->image('首图')->image('/uploads', 50, 50);
 			$grid->on_sale('已上架')->display(function ($value) {
@@ -69,7 +74,9 @@ class ProductsController extends Controller {
 			$grid->rating('评分');
 			$grid->sold_count('销量')->sortable();
 			$grid->review_count('评论数');
-
+            $grid->is_verify('是否核销')->display(function($v){
+                return $v ? '「是」' : '否';
+            });
 			$grid->actions(function ($actions) {
 				$actions->disableView();
 				$actions->disableDelete();
@@ -83,6 +90,162 @@ class ProductsController extends Controller {
 		});
 	}
 
+    public function generHtml($id){
+        $allspecs  = \App\Models\ProductSpec::where('product_id',$id)->get()->toArray();
+
+        foreach ($allspecs as $key => $v ) {
+            $allspecs[$key]['items'] = \App\Models\ProductSpecItem::where('spec_id',$v['id'])->get()->toArray();
+           // $s['items'] = \DB::table('product_spec_item')->where('spec_id',$s['id'])->select();
+        }
+        
+       // / unset($s);
+     
+        // $piclist1 = unserialize($item['thumb_url']);
+        // $piclist  = array();
+        // if (is_array($piclist1)) {
+        //     foreach ($piclist1 as $p) {
+        //         $piclist[] = is_array($p) ? $p['attachment'] : $p;
+        //     }
+        // }
+        $html    = "";
+        $options = \App\Models\ProductSku::where('product_id',$id)->orderBy('id','asc')->get()->toArray();
+       // var_dump($options);
+        $specs   = array();
+        if (count($options) > 0) {
+            $specitemids = explode("_", $options[0]['specs']);
+            foreach ($specitemids as $itemid) {
+                foreach ($allspecs as $ss) {
+                    $items = $ss['items'];
+                    foreach ($items as $it) {
+                        if ($it['id'] == $itemid) {
+                            $specs[] = $ss;
+                            break;
+                        }
+                    }
+                }
+            }
+            $html = '';
+            $html .= '<table class="table table-bordered table-condensed">';
+            $html .= '<thead>';
+            $html .= '<tr class="active">';
+            $len      = count($specs);
+            $newlen   = 1;
+            $h        = array();
+            $rowspans = array();
+            for ($i = 0; $i < $len; $i++) {
+                $html .= "<th style='width:80px;'>" . $specs[$i]['title'] . "</th>";
+                $itemlen = count($specs[$i]['items']);
+                if ($itemlen <= 0) {
+                    $itemlen = 1;
+                }
+                $newlen *= $itemlen;
+                $h = array();
+                for ($j = 0; $j < $newlen; $j++) {
+                    $h[$i][$j] = array();
+                }
+                $l            = count($specs[$i]['items']);
+                $rowspans[$i] = 1;
+                for ($j = $i + 1; $j < $len; $j++) {
+                    $rowspans[$i] *= count($specs[$j]['items']);
+                }
+            }
+          
+                $html .= '<th class="info" style="width:130px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">库存</div><div class="input-group"><input type="text" class="form-control option_stock_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_stock\');"></a></span></div></div></th>';
+                $html .= '<th class="success" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">销售价格</div><div class="input-group"><input type="text" class="form-control option_marketprice_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_marketprice\');"></a></span></div></div></th>';
+                $html .= '<th class="warning" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">市场价格</div><div class="input-group"><input type="text" class="form-control option_productprice_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_productprice\');"></a></span></div></div></th>';
+                $html .= '<th class="danger" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">成本价格</div><div class="input-group"><input type="text" class="form-control option_costprice_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_costprice\');"></a></span></div></div></th>';
+                $html .= '<th class="primary" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">商品编码</div><div class="input-group"><input type="text" class="form-control option_goodssn_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_goodssn\');"></a></span></div></div></th>';
+                $html .= '<th class="danger" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">商品条码</div><div class="input-group"><input type="text" class="form-control option_productsn_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_productsn\');"></a></span></div></div></th>';
+                $html .= '<th class="info" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">重量（克）</div><div class="input-group"><input type="text" class="form-control option_weight_all"  VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_weight\');"></a></span></div></div></th>';
+                $html .= '</tr></thead>';
+            
+            for ($m = 0; $m < $len; $m++) {
+                $k   = 0;
+                $kid = 0;
+                $n   = 0;
+                for ($j = 0; $j < $newlen; $j++) {
+                    $rowspan = $rowspans[$m];
+                    if ($j % $rowspan == 0) {
+                        $h[$m][$j] = array(
+                            "html" => "<td rowspan='" . $rowspan . "'>" . $specs[$m]['items'][$kid]['title'] . "</td>",
+                            "id" => $specs[$m]['items'][$kid]['id']
+                        );
+                    } else {
+                        $h[$m][$j] = array(
+                            "html" => "",
+                            "id" => $specs[$m]['items'][$kid]['id']
+                        );
+                    }
+                    $n++;
+                    if ($n == $rowspan) {
+                        $kid++;
+                        if ($kid > count($specs[$m]['items']) - 1) {
+                            $kid = 0;
+                        }
+                        $n = 0;
+                    }
+                }
+            }
+            $hh = "";
+            for ($i = 0; $i < $newlen; $i++) {
+                $hh .= "<tr>";
+                $ids = array();
+                for ($j = 0; $j < $len; $j++) {
+                    $hh .= $h[$j][$i]['html'];
+                    $ids[] = $h[$j][$i]['id'];
+                }
+                $ids = implode("_", $ids);
+                $val = array(
+                    "id" => "",
+                    "title" => "",
+                    "stock" => "",
+                    "costprice" => "",
+                    "productprice" => "",
+                    "marketprice" => "",
+                    "weight" => "",
+                    'virtual' => ''
+                );
+                foreach ($options as $o) {
+                    if ($ids === $o['specs']) {
+                        $val = array(
+                            "id" => $o['id'],
+                            "title" => $o['title'],
+                            "stock" => $o['stock'],
+                            "costprice" => $o['cost'],
+                            "productprice" => $o['price'],
+                            "marketprice" => $o['price_on_app'],
+                            "goodssn" => $o['product_sn'],
+                            "productsn" => $o['product_sn'],
+                            "weight" => $o['weight'],
+                            'virtual' => 1
+                        );
+                        break;
+                    }
+                }
+                    $hh .= '<td class="info">';
+                    $hh .= '<input name="option_stock_' . $ids . '[]"  type="text" class="form-control option_stock option_stock_' . $ids . '" value="' . $val['stock'] . '"/>';
+                    $hh .= '<input name="option_id_' . $ids . '[]"  type="hidden" class="form-control option_id option_id_' . $ids . '" value="' . $val['id'] . '"/>';
+                    $hh .= '<input name="option_ids[]"  type="hidden" class="form-control option_ids option_ids_' . $ids . '" value="' . $ids . '"/>';
+                    $hh .= '<input name="option_title_' . $ids . '[]"  type="hidden" class="form-control option_title option_title_' . $ids . '" value="' . $val['title'] . '"/>';
+                    $hh .= '<input name="option_virtual_' . $ids . '[]"  type="hidden" class="form-control option_title option_virtual_' . $ids . '" value="' . $val['virtual'] . '"/>';
+                    $hh .= '</td>';
+                    $hh .= '<td class="success"><input name="option_marketprice_' . $ids . '[]" type="text" class="form-control option_marketprice option_marketprice_' . $ids . '" value="' . $val['marketprice'] . '"/></td>';
+                    $hh .= '<td class="warning"><input name="option_productprice_' . $ids . '[]" type="text" class="form-control option_productprice option_productprice_' . $ids . '" " value="' . $val['productprice'] . '"/></td>';
+                    $hh .= '<td class="danger"><input name="option_costprice_' . $ids . '[]" type="text" class="form-control option_costprice option_costprice_' . $ids . '" " value="' . $val['costprice'] . '"/></td>';
+                    $hh .= '<td class="primary"><input name="option_goodssn_' . $ids . '[]" type="text" class="form-control option_goodssn option_goodssn_' . $ids . '" " value="' . $val['goodssn'] . '"/></td>';
+                    $hh .= '<td class="danger"><input name="option_productsn_' . $ids . '[]" type="text" class="form-control option_productsn option_productsn_' . $ids . '" " value="' . $val['productsn'] . '"/></td>';
+                    $hh .= '<td class="info"><input name="option_weight_' . $ids . '[]" type="text" class="form-control option_weight option_weight_' . $ids . '" " value="' . $val['weight'] . '"/></td>';
+                    $hh .= '</tr>';
+              
+            }
+            $html .= $hh;
+            $html .= "</table>";
+        }
+       
+        return [view('admin.tpl.full')->with(['allspecs' => $allspecs])->render(),$html];
+    }
+
+
 	/**
 	 * Make a form builder.
 	 *
@@ -92,13 +255,34 @@ class ProductsController extends Controller {
 
 		// 创建一个表单
 		return Admin::form(Product::class, function (Form $form) {
-			$form->tab('商品信息', function ($form) {
+            $form->tools(function (Form\Tools $tools) {
+
+            // // Disable `List` btn.
+            // $tools->disableList();
+
+            // // Disable `Delete` btn.
+            // $tools->disableDelete();
+
+            // // Disable `Veiw` btn.
+            $tools->disableView();
+
+            // // Add a button, the argument can be a string, or an instance of the object that implements the Renderable or Htmlable interface
+            // $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+        });
+
+
+            $shop_id = \Admin::user()->shop_id;
+			$form->tab('商品信息', function ($form) use($shop_id){
 				// 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
-				$form->select('category_id', '分类')->options(Category::selectOptions(null, '请选择'));
+           
+				$form->select('category_id', '分类')->options(Category::selectOptions(function($query)use($shop_id){
+                    return $query->where('shop_id','=',$shop_id);
+                }, '请选择'));
+                $form->text('product_ssn','产品SSN')->rules('required');
 				$form->text('title', '商品名称')->rules('required');
 				// 创建一个选择图片的框
 				$form->image('image', '封面图片')->rules('required|image')->uniqueName()->move('products/covers/' . date('Y-m-d'));
-				$form->hidden('shop_id')->default('1');
+				$form->hidden('shop_id')->default($shop_id);
 				$form->multipleImage('thumb', '副图')->addElementClass('file_upload')->removable()->uniqueName()->options([
 					'fileActionSettings' => [
 						'showZoom' => true,
@@ -120,14 +304,9 @@ class ProductsController extends Controller {
 					],
 					'allowedFileExtensions' => ['jpg', 'jpeg', 'png'],
 				])->help('图片大小 5M 以内，尺寸')->move('products/lists/' . date('Y-m-d'));
-                    Admin::js('/vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js');
-				// $form->hasMany('images','主图',function(Form\NestedForm $form){
-				//     $form->image('img','图片')->uniqueName()->move('products/lists/' .date('Y-m-d'));
-				// });
-				// 创建一个富文本编辑器
-				// $form->editor('description', '商品描述')->rules('required');
+                    //Admin::js('/vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js');
                 $form->currency('price','销售价');
-                // $form->currency('price_on_app','平台价')->min(0.01)->rules('required|integer|min:0')->help('0 为不限制');
+                $form->currency('price_on_app','平台价')->rules('required')->help('');
 				$form->number('max_buy', '用户单次最多购买')->min(0)->default(0)->rules('required|integer|min:0')->help('0 为不限制');
 
 				$form->radio('dispatchtype', '运费设置')->options(['1' => '统一邮费', '0' =>
@@ -149,8 +328,9 @@ class ProductsController extends Controller {
 				// 	$row->width(3)->currency('price', '单价')->symbol('￥')->rules('required|numeric|min:0.01');
 				// 	$row->width(3)->currency('price_on_app', '平台价')->symbol('￥')->rules('required|numeric|min:0.01');
 				// });
-$table = <<<TABLE
-<div id="specs">
+$table = '<div id="specs">';
+
+$table2=<<<TABLE
 </div>
 <table class="table" id='specTable' style='display:none;'>
         <tbody><tr>
@@ -161,204 +341,19 @@ $table = <<<TABLE
         </tr>
     </tbody></table>
     <div class="panel-body table-responsive" id="options" style="padding:0;">
-    </div>
 TABLE;
-    $form->html($table);
-$tableScript = <<<TST
-   $('input[name="has_sku"]').on('ifChecked',function(){
-        $('#specTable').toggle(null,null,! $(this).val());
-    });
-    $("input.file_upload").on('filesorted',function(e,params){
-    console.log('File sorted params', params);
-    });
-    $('#add-spec').click(function(){
-                    var len = $(".spec_item").length;
-               
-                    // if(type==3 && virtual==0 && len>=1){
-                    //     util.message('您的商品类型为：虚拟物品(卡密)的多规格形式，只能添加一种规格！');
-                    //     return;
-                    // }
-                    
-    $("#add-spec").html("正在处理...").attr("disabled", "true").toggleClass("btn-primary");
-        var url = "/api/v1/tpl?tpl=spec";
-        $.ajax({
-            "url": url,
-            success:function(data){
-                $("#add-spec").html('<i class="fa fa-plus"></i> 添加规格').removeAttr("disabled").toggleClass("btn-primary"); ;
-                $('#specs').append(data);
-                var len = $(".add-specitem").length -1;
-                $(".add-specitem:eq(" +len+ ")").focus();
-                                                                                
-                window.optionchanged = true;
-            }
-        });
-    });
-    window.removeSpec = function(specid){
-        if (confirm('确认要删除此规格?')){
-            $("#spec_" + specid).remove();
-            window.optionchanged = true;
-        }
-    }
-    window.addSpecItem = function(specid){
-    $("#add-specitem-" + specid).html("正在处理...").attr("disabled", "true");
-        var url = "/api/v1/tpl?tpl=specitem" + "&specid=" + specid;
-        $.ajax({
-            "url": url,
-            success:function(data){
-                $("#add-specitem-" + specid).html('<i class="fa fa-plus"></i> 添加规格项').removeAttr("disabled");
-                $('#spec_item_' + specid).append(data);
-                var len = $("#spec_" + specid + " .spec_item_title").length -1;
-                $("#spec_" + specid + " .spec_item_title:eq(" +len+ ")").focus();
-                window.optionchanged = true;
-                                                                        if(type==3 && virtual==0){
-                                                                                    $(".choosetemp").show();
-                                                                         }
-            }
-        });
-    }
-    window.removeSpecItem = function(obj){
-        $(obj).parent().parent().parent().remove();
-    }
-    window.calc = function(){
-    window.optionchanged = false;
-    var html = '<table class="table table-bordered table-condensed"><thead><tr class="active">';
-    var specs = [];
-         if($('.spec_item').length<=0){
-             $("#options").html('');
-             return;
-         }
-    $(".spec_item").each(function(i){
-        var _this = $(this);
+    $product_id = request()->route()->parameter('id');
 
-        var spec = {
-            id: _this.find(".spec_id").val(),
-            title: _this.find(".spec_title").val()
-        };
-    
-        var items = [];
-        _this.find(".spec_item_item").each(function(){
-            var __this = $(this);
-            var item = {
-                id: __this.find(".spec_item_id").val(),
-                title: __this.find(".spec_item_title").val(),
-                                                                        virtual: __this.find(".spec_item_virtual").val(),
-                show:__this.find(".spec_item_show").get(0).checked?"1":"0"
-            }
-            items.push(item);
-        });
-        spec.items = items;
-        specs.push(spec);
-    });
-    specs.sort(function(x,y){
-        if (x.items.length > y.items.length){
-            return 1;
-        }
-        if (x.items.length < y.items.length) {
-            return -1;
-        }
-    });
+$cc = $this->generHtml($product_id);
 
-    var len = specs.length;
-    var newlen = 1; 
-    var h = new Array(len); 
-    var rowspans = new Array(len); 
-    for(var i=0;i<len;i++){
-        html+="<th style='width:80px;'>" + specs[i].title + "</th>";
-        var itemlen = specs[i].items.length;
-        if(itemlen<=0) { itemlen = 1 };
-        newlen*=itemlen;
-        h[i] = new Array(newlen);
-        for(var j=0;j<newlen;j++){
-            h[i][j] = new Array();
-        }
-        var l = specs[i].items.length;
-        rowspans[i] = 1;
-        for(j=i+1;j<len;j++){
-            rowspans[i]*= specs[j].items.length;
-        }
-    }
+$table0 = $cc[0] ?:'';
+$table .= $table0 ?:'';
+$table .=$table2;
+$tableScript = $cc[1];
 
-    html += '<th class="info" style="width:130px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">库存</div><div class="input-group"><input type="text" class="form-control option_stock_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_stock\');"></a></span></div></div></th>';
-    html += '<th class="success" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">销售价格</div><div class="input-group"><input type="text" class="form-control option_marketprice_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_marketprice\');"></a></span></div></div></th>';
-    html+='<th class="warning" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">市场价格</div><div class="input-group"><input type="text" class="form-control option_productprice_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_productprice\');"></a></span></div></div></th>';
-    html+='<th class="danger" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">成本价格</div><div class="input-group"><input type="text" class="form-control option_costprice_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_costprice\');"></a></span></div></div></th>';
-                   html+='<th class="primary" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">商品编码</div><div class="input-group"><input type="text" class="form-control option_goodssn_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_goodssn\');"></a></span></div></div></th>';
-                   html+='<th class="danger" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">商品条码</div><div class="input-group"><input type="text" class="form-control option_productsn_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_productsn\');"></a></span></div></div></th>';
-    html+='<th class="info" style="width:150px;"><div class=""><div style="padding-bottom:10px;text-align:center;font-size:16px;">重量（克）</div><div class="input-group"><input type="text" class="form-control option_weight_all"VALUE=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-hand-o-down" title="批量设置" onclick="setCol(\'option_weight\');"></a></span></div></div></th>';
-    html+='</tr></thead>';
+$form->html($table . $tableScript . '</div><script src="/vendor/product.js"> </script>');
+    // $form->html($tableScript);
     
-    for(var m=0;m<len;m++){
-        var k = 0,kid = 0,n=0;
-        for(var j=0;j<newlen;j++){
-            var rowspan = rowspans[m]; 
-            if( j % rowspan==0){
-                h[m][j]={title: specs[m].items[kid].title, virtual: specs[m].items[kid].virtual,html: "<td rowspan='" +rowspan + "'>"+ specs[m].items[kid].title+"</td>",id: specs[m].items[kid].id};
-            }
-            else{
-                h[m][j]={title:specs[m].items[kid].title,virtual: specs[m].items[kid].virtual, html: "",id: specs[m].items[kid].id};    
-            }
-            n++;
-            if(n==rowspan){
-            kid++; if(kid>specs[m].items.length-1) { kid=0; }
-            n=0;
-            }
-        }
-    }
- 
-    var hh = "";
-    for(var i=0;i<newlen;i++){
-        hh+="<tr>";
-        var ids = [];
-        var titles = [];    
-                                    var virtuals = [];
-        for(var j=0;j<len;j++){
-            hh+=h[j][i].html; 
-            ids.push( h[j][i].id);
-            titles.push( h[j][i].title);
-                                                      virtuals.push( h[j][i].virtual);
-        }
-        ids =ids.join('_');
-        titles= titles.join('+');
-    
-        var val ={ id : "",title:titles, stock : "",costprice : "",productprice : "",marketprice : "",weight:"",productsn:"",goodssn:"",virtual:virtuals };
-        if( $(".option_id_" + ids).length>0){
-            val ={
-                id : $(".option_id_" + ids+":eq(0)").val(),
-                title: titles,
-                stock : $(".option_stock_" + ids+":eq(0)").val(),
-                costprice : $(".option_costprice_" + ids+":eq(0)").val(),
-                productprice : $(".option_productprice_" + ids+":eq(0)").val(),
-                marketprice : $(".option_marketprice_" + ids +":eq(0)").val(),
-                                                                        goodssn : $(".option_goodssn_" + ids +":eq(0)").val(),
-                                                                        productsn : $(".option_productsn_" + ids +":eq(0)").val(),
-                weight : $(".option_weight_" + ids+":eq(0)").val(),
-                                  virtual : virtuals
-            }
-        }
-        hh += '<td class="info">'
-        hh += '<input name="option_stock_' + ids +'[]"type="text" class="form-control option_stock option_stock_' + ids +'" value="' +(val.stock=='undefined'?'':val.stock )+'"/></td>';
-        hh += '<input name="option_id_' + ids+'[]"type="hidden" class="form-control option_id option_id_' + ids +'" value="' +(val.id=='undefined'?'':val.id )+'"/>';
-        hh += '<input name="option_ids[]"type="hidden" class="form-control option_ids option_ids_' + ids +'" value="' + ids +'"/>';
-        hh += '<input name="option_title_' + ids +'[]"type="hidden" class="form-control option_title option_title_' + ids +'" value="' +(val.title=='undefined'?'':val.title )+'"/></td>';
-                                    hh += '<input name="option_virtual_' + ids +'[]"type="hidden" class="form-control option_title option_title_' + ids +'" value="' +(val.virtual=='undefined'?'':val.virtual )+'"/></td>';
-        hh += '</td>';
-        hh += '<td class="success"><input name="option_marketprice_' + ids+'[]" type="text" class="form-control option_marketprice option_marketprice_' + ids +'" value="' +(val.marketprice=='undefined'?'':val.marketprice )+'"/></td>';
-        hh += '<td class="warning"><input name="option_productprice_' + ids+'[]" type="text" class="form-control option_productprice option_productprice_' + ids +'" " value="' +(val.productprice=='undefined'?'':val.productprice )+'"/></td>';
-        hh += '<td class="danger"><input name="option_costprice_' +ids+'[]" type="text" class="form-control option_costprice option_costprice_' + ids +'" " value="' +(val.costprice=='undefined'?'':val.costprice )+'"/></td>';
-                                    hh += '<td class="primary"><input name="option_goodssn_' +ids+'[]" type="text" class="form-control option_goodssn option_goodssn_' + ids +'" " value="' +(val.goodssn=='undefined'?'':val.goodssn )+'"/></td>';
-                                    hh += '<td class="danger"><input name="option_productsn_' +ids+'[]" type="text" class="form-control option_productsn option_productsn_' + ids +'" " value="' +(val.productsn=='undefined'?'':val.productsn )+'"/></td>';
-        hh += '<td class="info"><input name="option_weight_' + ids +'[]" type="text" class="form-control option_weight option_weight_' + ids +'" " value="' +(val.weight=='undefined'?'':val.weight )+'"/></td>';
-        hh += "</tr>";
-    }
-    html+=hh;
-    html+="</table>";
-    $("#options").html(html);
-}
-window.setCol= function(cls){
-    $("."+cls).val( $("."+cls+"_all").val());
-}
-TST;
-    Admin::script($tableScript);
              
 // $con = <<<TEST
 // <div class="panel panel-default spec_item" id="spec_Ebw31844lN4qo0iIq0iwIob421nI1Xo4" style="">

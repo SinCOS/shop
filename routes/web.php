@@ -1,9 +1,8 @@
 <?php
 
 
-// Route::resource('banner', 'BannerController');
+Route::resource('banner', 'BannerController');
 
-// Auth::routes();
 
 // Route::group(['middleware' => 'auth'], function() {
 //     Route::get('/email_verify_notice', 'PagesController@emailVerifyNotice')->name('email_verify_notice');
@@ -40,3 +39,7 @@
 // Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 // Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
 // Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

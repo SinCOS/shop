@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Admin\Controllers;
 
 use App\Models\Banner;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use App\Http\Wrapper\UserContent as Content;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
 class BannerController extends Controller
 {
     use HasResourceActions;
-     public function __construct()
-{
-    $this->middleware('auth');
-}
+
     /**
      * Index interface.
      *
@@ -85,7 +82,7 @@ class BannerController extends Controller
         $grid = new Grid(new Banner);
         $grid->name('活动名');
         $grid->column('thumb','轮播图')->display(function($img){
-            // return imageUrl($img?:'','admin');
+            return imageUrl($img?:'','admin');
         });
         // $grid->order('排序')->editable('text');
         $grid->not_before('开始时间');
