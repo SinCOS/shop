@@ -10,7 +10,7 @@ class AuthController extends BaseAuthController
 		if(!\Auth::guard('admin')->guest()){
 			return redirect('/home');
 		}
-		return view('admin.login');
+		return view('shop.login');
 	}
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);

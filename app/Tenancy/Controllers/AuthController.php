@@ -13,7 +13,7 @@ class AuthController extends BaseAuthController
 		if(!\Auth::guard('admin')->guest()){
 			return redirect(config('admin.router.prefix'));
 		}
-		return view('shop.login');
+		return view('admin.login');
 	}
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);
