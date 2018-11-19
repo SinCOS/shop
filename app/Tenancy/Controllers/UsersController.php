@@ -163,17 +163,17 @@ class UsersController extends Controller {
 			// $form = new Form(tap(new User, function ($user) {
 			//     $user->active_token = str_random(60);
 			// }));
+			$form->display('username','登录名');
+			// $form->text('name', '用户名')->rules(function (Form $form) {
+			// 	$rules = 'required|unique:users,id';
 
-			$form->text('name', '用户名')->rules(function (Form $form) {
-				$rules = 'required|unique:users,id';
+			// 	// 更新操作
+			// 	if (!is_null($id = $form->model()->getKey())) {
+			// 		$rules .= ",{$id}";
+			// 	}
 
-				// 更新操作
-				if (!is_null($id = $form->model()->getKey())) {
-					$rules .= ",{$id}";
-				}
-
-				return $rules;
-			});
+			// 	return $rules;
+			// });
 			$form->select('sex', '性别')->rules('required|in:0,1')->options(User::SEXES)->default(1);
 			$form->display('mobile', '手机号码');
 			// ->rules(function (Form $form) {
@@ -195,6 +195,7 @@ class UsersController extends Controller {
 					$form->password = bcrypt($form->password);
 				}
 			});
+			
 			return $form;
 		});
 	}

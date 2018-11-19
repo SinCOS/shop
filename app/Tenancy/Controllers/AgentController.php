@@ -151,11 +151,42 @@ class AgentController extends Controller
             '1' => '激活'
         ]);
         $form->saved(function($form){
-                if ($form->user['is_agent']) == 'on'){
-
+             
+            if ($form->user['is_agent'] == 'on'){
+             
+                if(!\DB::table('admin_role_users')->where('user_id',$form->user_id)->first()){
+                    \DB::table('admin_role_users')->insert([
+                          'role_id' => 3,
+                            'user_id' => $form->user_id
+                    ]);
                 }
+            
+            }else{
+                \DB::table('admin_role_users')->where('user_id',$form->user_id)->delete();
+            }
                
         });
         return $form;
+        
+    }
+
+    public function destroy($id)
+    {
+        $agent = Agent::find($id);
+        if ($this->form()->destroy($id)) {
+             \DB::table('admin_role_users')->where('user_id',$agent->user_id)->delete();
+            $data = [
+                'status'  => true,
+                'message' => trans('admin.delete_succeeded'),
+            ];
+
+        } else {
+            $data = [
+                'status'  => false,
+                'message' => trans('admin.delete_failed'),
+            ];
+        }
+
+        return response()->json($data);
     }
 }
