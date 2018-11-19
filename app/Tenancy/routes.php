@@ -20,4 +20,5 @@ Route::group([
 		$router->resource('shops','ShopsController');
 		$router->resource('banners',"BannerController");
 		$router->resource('videos',"VideoController");
+		$router->resource('agents','AgentController');
 });

@@ -10,9 +10,12 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .env
+.DS_Store
 /public/js
 /public/css
 /public/fonts
 /public/mix-manifest.json
 ftpsync.settings
 sftp-config.json
+sftp.json
+.vscode/sftp.json
