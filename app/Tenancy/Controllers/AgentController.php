@@ -74,6 +74,9 @@ class AgentController extends Controller {
 	 */
 	protected function grid() {
 		$grid = new Grid(new Agent);
+		if(\Admin::user()->is_Role('agent')){
+			//$grid->model()->where('district_id');
+		}
 		$grid->column("name", '代理名');
 		$grid->column("user.username", '登录账户');
 		$grid->column('user.mobile', '手机号码');
