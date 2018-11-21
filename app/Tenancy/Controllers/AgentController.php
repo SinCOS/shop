@@ -160,10 +160,8 @@ class AgentController extends Controller {
 	}
 
 	public function destroy($id) {
-		$agent = Agent::find($id);
 		if ($this->form()->destroy($id)) {
-			\App\Models\User::find($agent->user_id)->update(['is_agent' => 0]);
-			\DB::table('admin_role_users')->where('user_id', $agent->user_id)->delete();
+		
 			$data = [
 				'status' => true,
 				'message' => trans('admin.delete_succeeded'),

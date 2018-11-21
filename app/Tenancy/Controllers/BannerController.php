@@ -22,7 +22,7 @@ class BannerController extends Controller {
 	 */
 	public function index(Content $content) {
 		return $content
-			->header('Index')
+			->header('活动轮播图')
 			->description('description')
 			->body($this->grid());
 	}
@@ -50,7 +50,7 @@ class BannerController extends Controller {
 	 */
 	public function edit($id, Content $content) {
 		return $content
-			->header('Edit')
+			->header('编辑')
 			->description('description')
 			->body($this->form()->edit($id));
 	}
@@ -63,7 +63,7 @@ class BannerController extends Controller {
 	 */
 	public function create(Content $content) {
 		return $content
-			->header('Create')
+			->header('新增')
 			->description('description')
 			->body($this->form());
 	}
@@ -75,15 +75,30 @@ class BannerController extends Controller {
 	 */
 	protected function grid() {
 		$grid = new Grid(new Banner);
+		$grid->filter(function($filter){
+			
+			$filter->like('name','活动名');
+			
+		});
+		
+	
+		if(\Admin::user()->isRole('agent')){
+			$grid->model()->where('city_id',\Admin::user()->city_id);
+		}
+		
 		$grid->name('活动名');
 		$grid->column('thumb', '轮播图')->image('uploads', 100, 80);
 		// $grid->order('排序')->editable('text');
 		$grid->not_before('开始时间');
 		$grid->not_after('结束时间');
-		$grid->enabled('是否启用')->display(function ($true) {
-			return $true ? '是' : '否';
-		});
-
+		$grid->enabled('是否启用')->switch(['on'  => 
+				['value' => 1, 'text' => '是', 'color' => 'primary'],
+		'off' => 
+				['value' => 0, 'text' => '否', 'color' => 'default']
+		]);
+			//display(function ($true) {
+			//return $true ? '是' : '否';
+	//})
 		return $grid;
 	}
 
@@ -120,7 +135,7 @@ class BannerController extends Controller {
 
 		$form->datetimeRange('not_before', 'not_after', '活动时间')->help('必填');
 
-		$form->radio('enabled', '启用')->options(['1' => '是', '0' => '否'])->default(1);
+		$form->switch('enabled', '启用')->options(['1' => '是', '0' => '否'])->default(1);
 		return $form;
 	}
 }
