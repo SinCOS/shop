@@ -74,7 +74,7 @@ class AgentController extends Controller {
 	 */
 	protected function grid() {
 		$grid = new Grid(new Agent);
-		if(\Admin::user()->is_Role('agent')){
+		if(\Admin::user()->isRole('agent')){
 			//$grid->model()->where('district_id');
 		}
 		$grid->column("name", '代理名');
@@ -148,7 +148,7 @@ class AgentController extends Controller {
 
 				if (!\DB::table('admin_role_users')->where('user_id', $form->user_id)->first()) {
 					\DB::table('admin_role_users')->insert([
-						'role_id' => 3,
+						'role_id' => $form->agent_type =='agent' ? 3 : 4,
 						'user_id' => $form->user_id,
 					]);
 				}

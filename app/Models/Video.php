@@ -27,10 +27,10 @@ class Video extends Model
     	self::STATUS_NORMAL => '通过',
     ];
     public function category(){
-    	return $this->belongsTo(Category::class);
+    	return $this->belongsTo(sCategory::class);
     }
     public function user(){
     	return $this->belongsTo(User::class);
     }
-
+	
 }

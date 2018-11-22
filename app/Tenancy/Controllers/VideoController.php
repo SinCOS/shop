@@ -3,7 +3,7 @@
 namespace App\Tenancy\Controllers;
 
 use App\Models\Video;
-use App\Models\Category;
+use App\Models\sCategory;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -141,7 +141,7 @@ class VideoController extends Controller
         $form->image('thumb','预览图')->uniqueName()->rules('required|image');
 
         $form->display('user.name','用户');
-        $form->select('category_id','分类')->options(Category::videoAll())->rules('required');
+        $form->select('category_id','分类')->options(sCategory::videoAll())->rules('required');
         $form->url('link','链接')->help('请输入视频链接')->rules('required');
         $form->switch('status','状态');
         
