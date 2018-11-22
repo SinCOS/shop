@@ -108,9 +108,7 @@ class UsersController extends Controller
             return User::SEXES[$sex] ?? '未知';
         });
         $grid->column('mobile', '手机');
-        $grid->column('avatar', '头像')->display(function ($avatar) {
-            return imageUrl($avatar);
-        });
+        $grid->column('avatar', '头像')->image();
         // $grid->column('github_name', 'Github昵称');
         // $grid->column('qq_name', 'QQ昵称');
         // $grid->column('weibo_name', '微博昵称');
