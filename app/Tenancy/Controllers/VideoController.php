@@ -95,7 +95,7 @@ class VideoController extends Controller
         // $grid->column('thumb','预览图')->display(function($img){
         //     return "<a href='/uploads/{$img}' target='_blank'>" . \imageUrl($img?:'','admin') . "</a>";
         // });
-        $grid->column('thumb','预览图')->image(200,100);
+        $grid->column('thumb','预览图')->image('video/thumbs',200,100);
         $grid->column('link','链接')->link();
         $grid->column('user.name','用户');
         
@@ -138,7 +138,7 @@ class VideoController extends Controller
     {
         $form = new Form(new Video);
         $form->text('title','标题')->rules('required|min:6');
-        $form->image('thumb','预览图')->uniqueName()->rules('required|image');
+        $form->image('thumb','预览图')->uniqueName()->rules('required|image')->move('video/thumbs');
 
         $form->display('user.name','用户');
         $form->select('category_id','分类')->options(sCategory::videoAll())->rules('required');
