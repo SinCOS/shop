@@ -21,4 +21,5 @@ Route::group([
 		$router->resource('banners',"BannerController");
 		$router->resource('videos',"VideoController");
 		$router->resource('agents','AgentController');
+		$router->resource('scategory','sCategoryController');
 });

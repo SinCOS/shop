@@ -142,7 +142,7 @@ class ShopsController extends Controller {
 				$tools->disableDelete();
 			});
 		$show->id('Id');
-		$show->status('店铺状态')->using(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
+		$show->status('店铺状态')->using(Shop::SHOP_STATUS);
 		$show->title('店铺名');
 		
 		$show->field('category','店铺分类')->as(function($cat){
@@ -169,7 +169,9 @@ class ShopsController extends Controller {
 		});
 		return $show;
 	}
+	public function shopAudit(){
 
+	}
 	/**
 	 * Make a form builder.
 	 *
@@ -209,7 +211,7 @@ class ShopsController extends Controller {
 
 		$form->text('title', '店铺名称');
 		$form->image('background_image', '背景图片')->uniqueName();
-		$form->select('status', '状态')->options(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
+		$form->select('status', '状态')->options(Shop::SHOP_STATUS);
 		$form->text('concat_phone', '联系电话');
 		$form->text('address', 'Address');
 		$form->text('contcat_people', '联系人');
@@ -219,6 +221,7 @@ class ShopsController extends Controller {
 		//     $form->display('note', 'Note');
 		// }
 
+		
 		$form->rate('serve_rating', '服务评分')->default(5.00);
 		$form->rate('speed_rating', '速度评分')->default(5.00);
 		$form->display('agent_id', '市级代理');
@@ -244,6 +247,11 @@ class ShopsController extends Controller {
 			$form->image('sfzz', '身份证正面照')->uniqueName();
 			$form->image('sfzf', '身份证反面照')->uniqueName();
 			$form->image('yyzz', '营业执照正面照')->uniqueName();
+		});
+		$form->saved(function($form){
+			if($form->status == Shop::SHOP_STATUS_NORMAL  && $form->model()->user()->shop_id != $form->model()->id){
+				$form->model()->user()->update(['shop_id' => $form->model()->id]);
+			}
 		});
 		return $form;
 	}
