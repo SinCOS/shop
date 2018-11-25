@@ -226,9 +226,14 @@ class ShopsController extends Controller {
 		$form->rate('speed_rating', '速度评分')->default(5.00);
 		$form->display('agent_id', '市级代理');
 		$form->display('work_id', '业务员');
-		$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function($query){
-                    return $query->where('shop_id','=',0);
-                }, '请选择'))->rules('required|exists:categories,id');
+		// if(\Admin::user()->isAdministrator()){
+		// 	$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function ($query) {
+		// 		return $query->where('shop_id', '=', 0);
+		// 	}, '请选择'))->rules('required|exists:categories,id');
+		// }else{
+			$form->display('category.title', '店铺所属分类');
+		// }
+		
 		// $form->display('cat_id', '店铺所属分类')->with(function($cat_id){
 		//           return \App\Models\Category::find($cat_id)->title;
 		//       });

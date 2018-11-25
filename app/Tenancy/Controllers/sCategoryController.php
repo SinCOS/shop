@@ -39,7 +39,7 @@ class sCategoryController extends Controller
 
 							$icon = "<i class='fa {$branch['icon']}'></i>";
 
-							return $icon . " {$branch['id']} " . $branch['title'];
+							return $icon . " Id: {$branch['id']} " . $branch['title'];
 						});
 				}));
 
@@ -161,7 +161,7 @@ class sCategoryController extends Controller
 		$form->select('parent_id', '上级分类')->options(
 			sCategory::selectOptions());
 		// $form->image('thumb', '缩略图');
-		$form->hidden('shop_id')->default($shop_id);
+		// $form->hidden('shop_id')->default($shop_id);
 
 		$form->text('description', '描述');
 
