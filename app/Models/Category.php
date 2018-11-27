@@ -22,9 +22,6 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-    public static function videoAll(){
-    	return self::query()->where('parent_id','=',10)->orderBy('order')->latest()->pluck('title', 'id');
-    }
     public static function adminAll(){
     	return self::query()->where('shop_id',0)->orderBy('order')->pluck('title','id');
     }
