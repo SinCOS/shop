@@ -323,6 +323,11 @@ return [
      //         'min' => 1, 'max' => 5, 'step' => 1, 'size' => 'xs'
      //     ]
      // ]
+    'chartjs' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ],
     'multitenancy' => [
             'tenancy' => config_path('tenancy.php'),
         ],
