@@ -128,7 +128,7 @@ class AgentController extends Controller {
 		
 		$form->text('name', '代理用户');
 		$form->select('user_id', '登录账号')->options(
-			\App\Models\User::get()->pluck('mobile', 'id')
+			\App\Models\User::canAgents()
 		);
 
 		$form->select('agent_type', '代理类型')->options([

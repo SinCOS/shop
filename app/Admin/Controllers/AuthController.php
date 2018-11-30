@@ -15,11 +15,12 @@ class AuthController extends BaseAuthController
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);
 		$validator = \Validator::make($credentials,[
-			'username' => 'required|string|exists:users,username', //shop_id,!0
+			'username' => 'required|string', //shop_id,!0
 			'password' => 'required',
 			'captcha' =>'required|captcha'
 		],[
 			'exists' => '用户不存在'
+
 		]);
 		if($validator->fails()){
 			return \Redirect::back()->withInput()->withErrors($validator);

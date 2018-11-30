@@ -276,7 +276,7 @@ class ProductsController extends Controller {
 				// 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
            
 				$form->select('category_id', '分类')->options(Category::selectOptions(function($query)use($shop_id){
-                    return $query->where('shop_id','=',$shop_id);
+                    return $query->where('shop_id',$shop_id);
                 }, '请选择'));
                 $form->text('product_ssn','产品SSN')->rules('required');
 				$form->text('title', '商品名称')->rules('required');
@@ -305,6 +305,7 @@ class ProductsController extends Controller {
 					'allowedFileExtensions' => ['jpg', 'jpeg', 'png'],
 				])->help('图片大小 5M 以内，尺寸')->move('products/lists/' . date('Y-m-d'));
                     //Admin::js('/vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js');
+                $form->number('stock','库存')->min(0)->rules('required|integer|min:0');
                 $form->currency('price','销售价');
                 $form->currency('price_on_app','平台价')->rules('required')->help('');
 				$form->number('max_buy', '用户单次最多购买')->min(0)->default(0)->rules('required|integer|min:0')->help('0 为不限制');

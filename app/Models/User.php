@@ -49,7 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CartItem::class);
     }
-
+    public static function canAgents(){
+        return self::query()->where('is_agent',0)->latest()->pluck('mobile', 'id');
+    }
     public function favoriteProducts()
     {
         return $this->belongsToMany(Product::class, 'user_favorite_products')

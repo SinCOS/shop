@@ -26,7 +26,7 @@ class CustomUserProvider implements UserProvider
 
     public function retrieveByCredentials(array $credentials)
     {
-        return (new $this->model)->where('username',$credentials['username'])->whereOr('mobile',$credentials['username'])->first();
+        return (new $this->model)->where('username',$credentials['username'])->orWhere('mobile',$credentials['username'])->first();
         // 用$credentials里面的用户名密码去获取用户信息，然后返回Illuminate\Contracts\Auth\Authenticatable对象
     }
 

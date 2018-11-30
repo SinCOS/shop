@@ -78,7 +78,7 @@ class UsersController extends Controller {
 		$grid = new Grid(new User);
 
 		$grid->filter(function ($filter) {
-			$filter->like('username,name', '账户名或用户名');
+			$filter->like('username', '账户名');
 			$filter->equal('mobile', '手机号码')->mobile();
 			// $filter->like('name', '用户名');
 		});

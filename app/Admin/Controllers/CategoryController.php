@@ -160,7 +160,9 @@ class CategoryController extends Controller {
 		$form->text('title', '分类名');
 		$form->icon('icon', '图标');
 		$form->select('parent_id', '上级分类')->options(
-			Category::selectOptions());
+			Category::selectOptions(function($query)use($shop_id){
+				return $query->where('shop_id',$shop_id);
+			}));
 		$form->image('thumb', '缩略图');
 		$form->hidden('shop_id')->default($shop_id);
 		if (\Admin::user()->isAdministrator()) {
