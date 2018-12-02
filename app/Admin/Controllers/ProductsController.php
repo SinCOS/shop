@@ -323,12 +323,7 @@ class ProductsController extends Controller {
 				// 直接添加一对多的关联模型
 				//$('.iCheck-helper').click(function(){alert($('input[name="is_sku"]:checked').val());});
 				$form->radio('has_sku','是否多规格')->options(['0'=>'否','1'=>'是'])->default(0);
-				// $form->row(function ($row) use ($form) {
-				// 	$row->width(3)->text('title', 'SKU 名称')->rules('required');
-				// 	$row->width(3)->text('description', 'SKU 描述')->rules('required');
-				// 	$row->width(3)->currency('price', '单价')->symbol('￥')->rules('required|numeric|min:0.01');
-				// 	$row->width(3)->currency('price_on_app', '平台价')->symbol('￥')->rules('required|numeric|min:0.01');
-				// });
+
 $table = '<div id="specs">';
 
 $table2=<<<TABLE

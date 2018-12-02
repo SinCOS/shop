@@ -20,7 +20,13 @@
 
 use App\Admin\Extensions\WangEditor;
 use Encore\Admin\Form;
+use Encore\Admin\Facades\Admin;
 Form::forget(['editor']);
 Form::extend('editor', WangEditor::class);
 Form::extend('diymap',\App\Admin\Field\DiyMap::class);
+
+
+Admin::navbar(function(\Encore\Admin\Widgets\Navbar $navbar){
+    $navbar->right(new \App\Admin\Extensions\Nav\Links());
+});
 require __DIR__ . '/helpers.php';
