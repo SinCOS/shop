@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Tenancy\Controllers;
 
 use App\Exceptions\InternalException;
 use App\Models\Order;
@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use App\Http\Requests\Admin\HandleRefundRequest;
 
-class OrdersController extends Controller
+class OrderController extends Controller
 {
     use ModelForm;
 
@@ -31,7 +31,7 @@ class OrdersController extends Controller
         return Admin::content(function (Content $content) use ($order) {
             $content->header('查看订单');
             // body 方法可以接受 Laravel 的视图作为参数
-            $content->body(view('admin.orders.show', ['order' => $order]));
+            $content->body(view('admin.orders.admin_show', ['order' => $order]));
         });
     }
 
@@ -48,17 +48,17 @@ class OrdersController extends Controller
         // Laravel 5.5 之后 validate 方法可以返回校验过的值
         $data = $this->validate($request, [
             'express_company' => ['required'],
-            'express_no'      => ['required'],
+            'express_no' => ['required'],
         ], [], [
             'express_company' => '物流公司',
-            'express_no'      => '物流单号',
+            'express_no' => '物流单号',
         ]);
         // 将订单发货状态改为已发货，并存入物流信息
         $order->update([
             'ship_status' => Order::SHIP_STATUS_DELIVERED,
             // 我们在 Order 模型的 $casts 属性里指明了 ship_data 是一个数组
             // 因此这里可以直接把数组传过去
-            'ship_data'   => $data, 
+            'ship_data' => $data,
         ]);
 
         // 返回上一页
@@ -72,25 +72,30 @@ class OrdersController extends Controller
             //->whereNotNull('paid_at')
             $grid->disableExport();
             $grid->disableRowSelector();
-            $grid->filter(function($filter){
-                $filter->equal('no','订单号');
-                $filter->between('paid_at','支付时间')->datetime();
-                $filter->between('created_at','创建时间')->datetime();
-                $filter->equal('ship_status','配送状态')->select(Order::$shipStatusMap);
-                $filter->equal('refund_status','退款状态')->select(Order::$refundStatusMap);
+            $grid->filter(function ($filter) {
+                $filter->equal('no', '订单号');
+                $filter->equal('shop_id','店家ID');
+                $filter->between('paid_at', '支付时间')->datetime();
+                $filter->between('created_at', '创建时间')->datetime();
+                $filter->equal('ship_status', '配送状态')->select(Order::$shipStatusMap);
+                $filter->equal('refund_status', '退款状态')->select(Order::$refundStatusMap);
             });
-            $grid->model()->where(
-                'shop_id','=',Admin::user()->shop_id)->orderBy('paid_at', 'desc');
 
             $grid->no('订单流水号');
             // 展示关联关系的字段时，使用 column 方法
-            $grid->column('user.username', '买家');
+            $grid->column('shop.title','店铺')->display(function($val){
+                return "<a target='_blank' href='/shops/{$this->shop_id}'>" . $val . "</a>";
+            });
+            
+            $grid->column('user.username', '买家')->display(function($val){
+                
+            });
             $grid->total_amount('总金额')->sortable();
             $grid->paid_at('支付时间')->sortable();
-            $grid->ship_status('发货状态')->display(function($value) {
+            $grid->ship_status('发货状态')->display(function ($value) {
                 return Order::$shipStatusMap[$value];
             });
-            $grid->refund_status('退款状态')->display(function($value) {
+            $grid->refund_status('退款状态')->display(function ($value) {
                 return Order::$refundStatusMap[$value];
             });
             // 禁用创建按钮，后台不需要创建订单
@@ -121,12 +126,12 @@ class OrdersController extends Controller
             $this->_refundOrder($order);
         } else {
             // 将拒绝退款理由放到订单的 extra 字段中
-            $extra = $order->extra ?: [];
+            $extra = $order->extra ? : [];
             $extra['refund_disagree_reason'] = $request->input('reason');
             // 将订单的退款状态改为未退款
             $order->update([
                 'refund_status' => Order::REFUND_STATUS_PENDING,
-                'extra'         => $extra,
+                'extra' => $extra,
             ]);
         }
 
@@ -184,7 +189,7 @@ class OrdersController extends Controller
                 break;
             default:
                 // 原则上不可能出现，这个只是为了代码健壮性
-                throw new InternalException('未知订单支付方式：'.$order->payment_method);
+                throw new InternalException('未知订单支付方式：' . $order->payment_method);
                 break;
         }
     }

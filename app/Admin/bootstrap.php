@@ -24,7 +24,7 @@ use Encore\Admin\Facades\Admin;
 Form::forget(['editor']);
 Form::extend('editor', WangEditor::class);
 Form::extend('diymap',\App\Admin\Field\DiyMap::class);
-
+Form::extend('gdmap', \App\Admin\Field\GDMap::class);
 
 Admin::navbar(function(\Encore\Admin\Widgets\Navbar $navbar){
     $navbar->right(new \App\Admin\Extensions\Nav\Links());

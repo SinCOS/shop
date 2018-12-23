@@ -82,7 +82,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function shop(){
+        return $this->belongsTo(Shop::class);
+    }
     public function items()
     {
         return $this->hasMany(OrderItem::class);
@@ -110,7 +112,12 @@ class Order extends Model
 
         return false;
     }
-
+    public  static function getIndexStats(){
+        $query = $this->query()->where('paid_at','>=',\Carbon\Carbon::today());
+        $wait = $query->where('shop_status',self::SHIP_STATUS_PENDING)->count();
+        $DELIVERED = $query->where('shop_status',self::SHIP_STATUS_DELIVERED)->count();
+        return ['wait' => $wait,'delivered' =>$DELIVERED];
+    }
     public static function getAvailableRefundNo()
     {
         do {

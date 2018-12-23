@@ -18,4 +18,4 @@ yarn-error.log
 ftpsync.settings
 sftp-config.json
 sftp.json
-.vscode/sftp.json
+/.vscode

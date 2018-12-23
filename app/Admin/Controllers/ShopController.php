@@ -149,13 +149,10 @@ class ShopController extends Controller
         //           return \App\Models\Category::find($cat_id)->title;
         //       });
         $form->embeds('area', '地理信息', function ($form) {
-            $form->diymap('lat', 'lgt', '经纬度');
-            //    $form->text('abc','123');
-            // //    $form->saving(function($form){
-            // //     $form->model()->lat = request()->get('abc');
-            // // });
+             $form->diymap('lat', 'lgt', '经纬度');
 
         });
+        $form->gdmap('path', '配送区域');
         $form->display('type', '商户类型')->with(function ($val) {
             return Shop::SHOP_USER_TYPE_MAP[$val] ?: '未知';
         });

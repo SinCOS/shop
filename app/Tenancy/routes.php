@@ -22,4 +22,5 @@ Route::group([
 		$router->resource('videos',"VideoController");
 		$router->resource('agents','AgentController');
 		$router->resource('scategory','sCategoryController');
+		$router->resource('orders','OrderController');
 });
