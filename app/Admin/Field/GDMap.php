@@ -22,8 +22,8 @@ class GDMap extends Field
     {
      $js = ["https://webapi.amap.com/maps?v=1.4.11&key=fcd42350612b738fc7b65159844f51a5&plugin=AMap.MouseTool",
             "https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"];
-     $css = "https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css";
-        return compact('js','css');
+     
+        return compact('js');
     }
 
     public function __construct($column, $arguments)
@@ -135,5 +135,7 @@ $(function(){
     })
 });
 EOT;
+$css = "https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css";
+\Admin::css($css);
     }
 }

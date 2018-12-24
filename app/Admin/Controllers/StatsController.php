@@ -25,7 +25,7 @@ class StatsController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
+            ->header('统计信息')
             ->description('description')
             ->body($this->grid());
     }
@@ -81,11 +81,12 @@ class StatsController extends Controller
      */
     protected function grid()
     {
+       
        $table = new Tab();
-       $table->add('本月数据',view('admin.chart', ['data' => \App\Admin\Model\OrderCommon::getDays(7)]));
+       $table->add('本月数据',view('admin.chart', ['data' => \App\Admin\Model\OrderCommon::getDays(date('d')-1)]));
        $table->add('本季度',new Table());
-       $table->add('6个月统计数据',new Table());
-       $table->add('本年度',new Box('本年度数据统计', view('admin.chart', ['data' => \App\Admin\Model\OrderCommon::getDays(7)])));
+    //    $table->add('6个月统计数据',new Table());
+    //    $table->add('本年度',new Box('本年度数据统计', view('admin.chart', ['data' => \App\Admin\Model\OrderCommon::getDays(7)])));
 
         return $table;
     }
