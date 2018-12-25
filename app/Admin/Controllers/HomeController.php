@@ -28,7 +28,7 @@ class HomeController extends Controller
 
                 $row->column(12, function (Column $column) {
                     // $order = \App\Models\Order::where('shop_id', \Admin::user()->shop_id)->select();
-                    $column->append(new Box('订单统计',new Table(['待发货', '待收获', '退款申请', '待付款'],[[0,0,0,0]])));
+                    $column->append(new Box('订单统计',new Table(['待发货', '待收货物', '退款申请', '待付款'],[[0,0,0,0]])));
                 });
                 $row->column(12, function (Column $column) {
                     // $order = \App\Models\Order::where('shop_id', \Admin::user()->shop_id)->select();
