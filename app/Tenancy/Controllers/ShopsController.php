@@ -231,7 +231,7 @@ class ShopsController extends Controller {
 		// 		return $query->where('shop_id', '=', 0);
 		// 	}, '请选择'))->rules('required|exists:categories,id');
 		// }else{
-			$form->display('category.title', '店铺所属分类');
+			$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions());
 		// }
 		
 		// $form->display('cat_id', '店铺所属分类')->with(function($cat_id){
@@ -254,8 +254,10 @@ class ShopsController extends Controller {
 			$form->image('yyzz', '营业执照正面照')->uniqueName();
 		});
 		$form->saved(function($form){
-			if($form->status == Shop::SHOP_STATUS_NORMAL  && $form->model()->user()->shop_id != $form->model()->id){
-				$form->model()->user()->update(['shop_id' => $form->model()->id]);
+			$user = $form->model()->user;;
+			//dd($user->toJson());
+			if($form->status == Shop::SHOP_STATUS_NORMAL  && $user && $user->shop_id == 0){
+				$form->model()->user->update(['shop_id' => $form->model()->id]);
 			}
 		});
 		return $form;

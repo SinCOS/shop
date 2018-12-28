@@ -53,7 +53,7 @@ class Shop extends Model
 //     return json_decode($author, true);
 // }
     public function user(){
-        return $this->belongsTo(User::class,'user_id');
+        return $this->hasOne(User::class,'id','user_id');
     }
     public function category(){
         return $this->belongsTo(Category::class,'cat_id','id');
