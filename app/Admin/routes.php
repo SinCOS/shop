@@ -51,7 +51,8 @@ Route::group([
     $router->put('coupon_codes/{id}', 'CouponCodesController@update');
     $router->delete('coupon_codes/{id}', 'CouponCodesController@destroy');
     $router->resource('/stats','StatsController');
-
+    $router->resource('/dispatch','DispatchController');
+    
     $router->post('upload/editor', 'UploadController@uploadByEditor');
     $router->post('upload/file-input', 'UploadController@uploadByFileInput')->name('upload.file-input');
 });

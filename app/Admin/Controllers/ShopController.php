@@ -152,7 +152,7 @@ class ShopController extends Controller
              $form->diymap('lat', 'lgt', '经纬度');
 
         });
-        $form->gdmap('path', '配送区域');
+       
         $form->display('type', '商户类型')->with(function ($val) {
             return Shop::SHOP_USER_TYPE_MAP[$val] ?: '未知';
         });

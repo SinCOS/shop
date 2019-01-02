@@ -58,7 +58,7 @@ $(function(){
     var start = false;
     var marks = [];
     AMap.event.addListener(map,'click',function(e){
-        if(start) marks.push([e.lnglat.lng,e.lnglat.lat]);
+        if(start) marks.push(e.lnglat.lng + " " + e.lnglat.lat);
         console.log(e);
     });
     var mouseTool = new AMap.MouseTool(map)
@@ -130,7 +130,9 @@ $(function(){
     mouseTool.on('draw', function(event) {
         start = false;
       // event.obj 为绘制出来的覆盖物对象
-      console.log(marks);
+      console.log(marks.join(','));
+      $("input[name='{$this->id['id']}']").val(marks.join(', '));
+
       log.info('覆盖物对象绘制完成')
     })
 });

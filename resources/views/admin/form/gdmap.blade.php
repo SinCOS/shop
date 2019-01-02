@@ -3,7 +3,7 @@
     <label for="{{$id['id']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
+    <input type="hidden" name="{{$id['id']}}" value="">
         @include('admin::form.error')
     <div id="{{$id['id']}}" style="width: 100%;height:500px;"></div>
     </div>
