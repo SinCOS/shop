@@ -68,9 +68,27 @@ $(function(){
         marks = [];
         map.clearMap();
     }
-
+    var val = $("input[name='{$this->id['id']}']").val();
+    var arr = val.split(',');
+    var Path = arr.map(function(v){
+      return v.split(' ');
+    });
+    console.log(Path);
     $('.poly').click(drawPolygon);
     $('.clearMap').click(clearMap);
+    var polygon = new AMap.Polygon({
+      path:Path,
+      isOutline: true,
+        borderWeight: 3,
+        strokeColor: "#FF33FF", 
+        strokeWeight: 6,
+        strokeOpacity: 0.2,
+        fillOpacity: 0.4,
+        // 线样式还支持 'dashed'
+        fillColor: '#1791fc',
+        zIndex: 50,
+    });
+    polygon.setMap(map);
     function drawPolyline () {
       mouseTool.polyline({
         strokeColor: "#3366FF", 
@@ -131,7 +149,7 @@ $(function(){
         start = false;
       // event.obj 为绘制出来的覆盖物对象
       console.log(marks.join(','));
-      $("input[name='{$this->id['id']}']").val(marks.join(', '));
+      $("input[name='{$this->id['id']}']").val(marks.join(','));
 
       log.info('覆盖物对象绘制完成')
     })

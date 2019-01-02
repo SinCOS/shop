@@ -121,7 +121,10 @@ class DispatchController extends Controller
          $form->gdmap('positions', '配送区域');
         $form->hidden('shop_id')->default( $shop_id);
         $form->saving(function($form){
-            $form->positions = \DB::raw("GeomFromText('POLYGON(({$form->positions}))')");
+            if($form->shop_id == 0){
+                $form->shop_id = $shop_id;
+            }
+            //$form->positions = \DB::raw("MultiPointFromText('MULTIPOINT(({$form->positions}))')");
         });
         $form->footer(function ($footer) {
 

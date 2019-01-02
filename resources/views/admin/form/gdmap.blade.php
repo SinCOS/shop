@@ -1,9 +1,10 @@
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
     <label for="{{$id['id']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+   
 
     <div class="{{$viewClass['field']}}">
-    <input type="hidden" name="{{$id['id']}}" value="">
+    <input type="hidden" name="{{$id['id']}}" value="{{old($column['id'],$value['id'])}}" {!! $attributes !!}>
         @include('admin::form.error')
     <div id="{{$id['id']}}" style="width: 100%;height:500px;"></div>
     </div>
