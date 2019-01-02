@@ -84,6 +84,12 @@ class DispatchController extends Controller
         //     $tools->disableView();
         // });
         $grid->disableExport();
+        $grid->disableFilter();
+        $grid->disableTools();
+        // $grid->disableView();
+        $grid->actions(function($actions){  
+            $actions->disableView();          
+        });
         $grid->name('方案名');
         $grid->startup_price('起送价');
         $grid->price('配送费');
@@ -120,7 +126,7 @@ class DispatchController extends Controller
         $form->decimal('price','配送费');
          $form->gdmap('positions', '配送区域');
         $form->hidden('shop_id')->default( $shop_id);
-        $form->saving(function($form){
+        $form->saving(function($form)use($shop_id){
             if($form->shop_id == 0){
                 $form->shop_id = $shop_id;
             }

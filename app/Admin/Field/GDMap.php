@@ -69,26 +69,30 @@ $(function(){
         map.clearMap();
     }
     var val = $("input[name='{$this->id['id']}']").val();
-    var arr = val.split(',');
-    var Path = arr.map(function(v){
-      return v.split(' ');
-    });
-    console.log(Path);
+    if(val.trim().length > 0){
+      var arr = val.split(',');
+      var Path = arr.map(function(v){
+        return v.split(' ');
+      });
+      console.log(Path);
+      var polygon = new AMap.Polygon({
+        path:Path,
+        isOutline: true,
+          borderWeight: 3,
+          strokeColor: "#FF33FF", 
+          strokeWeight: 6,
+          strokeOpacity: 0.2,
+          fillOpacity: 0.4,
+          // 线样式还支持 'dashed'
+          fillColor: '#1791fc',
+          zIndex: 50,
+      });
+      polygon.setMap(map);
+    }
+   
     $('.poly').click(drawPolygon);
     $('.clearMap').click(clearMap);
-    var polygon = new AMap.Polygon({
-      path:Path,
-      isOutline: true,
-        borderWeight: 3,
-        strokeColor: "#FF33FF", 
-        strokeWeight: 6,
-        strokeOpacity: 0.2,
-        fillOpacity: 0.4,
-        // 线样式还支持 'dashed'
-        fillColor: '#1791fc',
-        zIndex: 50,
-    });
-    polygon.setMap(map);
+
     function drawPolyline () {
       mouseTool.polyline({
         strokeColor: "#3366FF", 
