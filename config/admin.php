@@ -23,7 +23,6 @@ return [
     |
     */
     'logo' => '<b>管理</b> 后台',
-
     /*
     |--------------------------------------------------------------------------
     | Laravel-admin mini logo
@@ -112,7 +111,7 @@ return [
         'providers' => [
             'admin' => [
                 'driver' => 'custom',
-                'model'  => Encore\Admin\Auth\Database\Administrator::class,
+                'model'  => App\Admin\Model\Admina::class,
             ],
         ],
     ],
@@ -153,7 +152,7 @@ return [
 
         // User tables and model.
         'users_table' => 'users',
-        'users_model' => Encore\Admin\Auth\Database\Administrator::class,
+        'users_model' => App\Admin\Model\Admina::class,
 
         // Role table and model.
         'roles_table' => 'admin_roles',

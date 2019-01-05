@@ -78,7 +78,7 @@ class AgentController extends Controller {
 			//$grid->model()->where('district_id');
 		}
 		$grid->column("name", '代理名');
-		$grid->column("user.username", '登录账户');
+		$grid->column("user.name", '登录账户');
 		$grid->column('user.mobile', '手机号码');
 		$grid->column('agent_type', '代理类型')->display(function ($v) {
 			return $v == 'agent' ? '代理' : '业务员';

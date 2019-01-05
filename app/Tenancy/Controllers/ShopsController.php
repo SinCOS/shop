@@ -10,7 +10,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use App\Models\Agent;
 class ShopsController extends Controller {
 	use HasResourceActions;
 
@@ -85,6 +85,17 @@ class ShopsController extends Controller {
 				$batch->disableDelete();
 			});
 		});
+		$user = \Admin::user();
+		if($user->isRole('agent')){
+			
+			$id = \Admin::user()->agent->id;
+			$grid->model()->where('agent_id', $id);
+		}
+		if($user->isRole('saller')){
+			$id = \Admin::user()->agent->id;
+			$grid->model()->where('saller_id', $id);
+		}
+		$grid->disableExport();
 		$grid->disableCreateButton();
 		$grid->actions(function ($actions) {
 			$actions->disableDelete();

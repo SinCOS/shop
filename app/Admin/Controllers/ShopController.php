@@ -127,11 +127,11 @@ class ShopController extends Controller
     // 'district_id' => '区']);
 //JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX
 
-        $form->text('title', '店铺名称');
+        $form->display('title', '店铺名称');
         $form->image('background_image', '背景图片')->uniqueName()->move('shops/')->help('尺寸750x200');
-        $form->select('status', '状态')->options(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
+        $form->display('status', '状态');//->options(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
         $form->text('concat_phone', '联系电话');
-        $form->text('address', 'Address');
+        $form->text('address', '地址');
         $form->text('contcat_people', '联系人');
         $form->image('logo', '商铺logo')->uniqueName();
         $form->display('money', '金额');
@@ -139,10 +139,10 @@ class ShopController extends Controller
         //     $form->display('note', 'Note');
         // }
 
-        $form->rate('serve_rating', '服务评分')->default(5.00);
-        $form->rate('speed_rating', '速度评分')->default(5.00);
-        $form->display('agent_id', '市级代理');
-        $form->display('work_id', '业务员');
+        $form->rate('serve_rating', '服务评分')->default(5.00)->readOnly();
+        $form->rate('speed_rating', '速度评分')->default(5.00)->readOnly();
+        $form->display('agent.name', '市级代理');
+        $form->display('saller.name', '业务员');
         $form->display('category.title', '店铺所属分类');
         //->options(Category::selectOrderAll())->rules('required|exists:categories,id')->readOnly();
         // $form->display('cat_id', '店铺所属分类')->with(function($cat_id){

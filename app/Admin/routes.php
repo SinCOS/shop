@@ -30,6 +30,7 @@ Route::group([
     $router->resource('category', 'CategoryController');
     $router->get('setting','ShopController@edit');//->only('edit,show');
     $router->put('setting','ShopController@update');
+    $router->resource('shops','\App\Tenancy\Controllers\ShopsController');
     $router->resource('videos','VideoController');
     $router->resource('banners','BannerController');
     $router->get('auth/login', 'AuthController@getLogin');

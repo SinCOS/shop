@@ -80,6 +80,8 @@ class DispatchController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Dispatch);
+        $shop_id = \Admin::user()->shop_id;
+        $grid->model()->where('shop_id',$shop_id);
         // $grid->tools(function($tools){
         //     $tools->disableView();
         // });

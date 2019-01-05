@@ -44,7 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserAddress::class);
     }
-
+    public function agent_id(){
+        return $this->hasOne(Agent::class)->id;
+    }
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);

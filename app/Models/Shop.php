@@ -58,6 +58,12 @@ class Shop extends Model
     public function category(){
         return $this->belongsTo(Category::class,'cat_id','id');
     }
+    public function agent(){
+        return $this->belongsTo(Agent::class, 'agent_id');
+    }
+    public function saller(){
+        return $this->belongsTo(Agent::class, 'work_id');
+    }
     public function setThumbAttribute($val){
         if(is_array($val)){
              $this->attributes['thumb'] = json_encode($val);

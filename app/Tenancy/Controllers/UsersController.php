@@ -84,6 +84,7 @@ class UsersController extends Controller {
 		});
 		$grid->actions(function ($actions) {
 			$actions->disableDelete();
+			$actions->disableView();
 		});
 		$grid->disableExport();
 		$grid->disableCreation();
@@ -138,8 +139,8 @@ class UsersController extends Controller {
 			return imageUrl($avatar);
 		});
 		// $show->field('github_name', 'Github昵称');
-		$show->field('qq_name', 'QQ昵称');
-		$show->field('weibo_name', '微博昵称');
+		// $show->field('qq_name', 'QQ昵称');
+		// $show->field('weibo_name', '微博昵称');
 		$show->field('login_count', '登录次数');
 		$show->field('is_active', '是否激活')->display(function ($isActive) {
 			return $isActive == User::ACTIVE_STATUS
