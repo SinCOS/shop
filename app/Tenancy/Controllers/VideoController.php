@@ -96,7 +96,12 @@ class VideoController extends Controller
         //     return "<a href='/uploads/{$img}' target='_blank'>" . \imageUrl($img?:'','admin') . "</a>";
         // });
         $grid->column('thumb','预览图')->image('uploads',200,100);
-        $grid->column('link','链接')->link();
+        $grid->column('link','链接')->display(function($v){
+            if(strstr($v,'http')){
+                return "<a href='{$v}' target='_blank'>点击</a>";
+            }
+            return "<a href='/uploads/{$v}' target='_blank'>点击</a>";
+        });
         $grid->column('user.name','用户');
         
         $grid->status('状态')->editable('select',Video::STATUS_MAP);
@@ -137,12 +142,12 @@ class VideoController extends Controller
     protected function form()
     {
         $form = new Form(new Video);
-        $form->text('title','标题')->rules('required|min:6');
+        $form->text('title','标题')->rules('required|min:6')->help("最少6个字符");
         $form->image('thumb','预览图')->uniqueName()->rules('required|image')->move('video/thumbs');
 
         $form->display('user.name','用户');
         $form->hidden('user_id')->default(0);
-        $form->select('category_id','分类')->options(sCategory::videoAll())->rules('required');
+        $form->select('category_id','分类')->options(sCategory::buildSelectOptions())->rules('required');
         $form->file('link','视频文件')->help('请输入视频链接')->uniqueName()->rules('required')->move('video/files');
         $form->switch('status','状态');
         

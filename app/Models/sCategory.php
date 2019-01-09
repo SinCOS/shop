@@ -17,7 +17,7 @@ class sCategory extends Model
         $this->setTitleColumn('title');
     }
     public static function videoAll(){
-    	return self::query()->where('parent_id','=',1)->orderBy('order')->latest()->pluck('title', 'id');
+    	return self::query()->orderBy('order')->latest()->pluck('title', 'id');
     }
 
     //
