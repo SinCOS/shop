@@ -79,6 +79,11 @@ class ShopsController extends Controller {
 			$filter->equal('status', '状态')->select(Shop::SHOP_STATUS);
 			$filter->like('title', '店铺名');
 			$filter->like('address', '地址');
+			if(\Admin::user()->isAdministrator()){
+				$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city');
+				$filter->equal('city_id','市')->select();
+			}
+			
 		});
 		$grid->tools(function ($tools) {
 			$tools->batch(function ($batch) {

@@ -40,15 +40,14 @@ class CategoryController extends Controller {
 					$tree->query(function ($model) use ($shop_id) {
 						return $model->where('shop_id', $shop_id);
 					});
-					$tree->nestable(['maxDepth' => 1])
-						->branch(function ($branch) {
+					$tree->nestable(['expandAll'=>true])->branch(function ($branch) {
 
 							$icon = "<i class='fa {$branch['icon']}'></i>";
-
-							return $icon . " {$branch['id']} " . $branch['title'];
+							//. " {$branch['id']} "
+							return $icon  . $branch['title'];
 						});
 				}));
-
+				\Admin::script('$(function(){$(\'.dd\').nestable(\'collapseAll\');});');
 				// 新建表单
 				$row->column(6, function (Column $column) use ($shop_id) {
 					$form = new \Encore\Admin\Widgets\Form();
@@ -61,7 +60,7 @@ class CategoryController extends Controller {
 					$form->text('title', '分类名')->rules('required|unique:categories,title');
 					$form->icon('icon', '图标')->default('fa-bars')->rules('required');
 					$form->image('thumb', '缩略图')->uniqueName()->rules('required');
-
+					$form->number('order','序号')->rules('min:0');
 					$form->hidden('shop_id')->default($shop_id);
 					if (\Admin::user()->isAdministrator()) {
 						$form->switch('is_index', '首页显示')->states([
@@ -72,6 +71,8 @@ class CategoryController extends Controller {
 							'0' => '正常',
 							'1' => '核销',
 							'2' => '其他',
+							'3' => '全球购',
+							'4' => '城市分类'
 						]);
 					}
 
@@ -163,7 +164,7 @@ class CategoryController extends Controller {
 			Category::selectOptions(function($query)use($shop_id){
 				return $query->where('shop_id',$shop_id);
 			}));
-		$form->image('thumb', '缩略图');
+		$form->image('thumb', '缩略图')->uniqueName()->rules('required');
 		$form->hidden('shop_id')->default($shop_id);
 		if (\Admin::user()->isAdministrator()) {
 
@@ -171,13 +172,15 @@ class CategoryController extends Controller {
 				'0' => '正常',
 				'1' => '核销',
 				'2' => '其他',
+				'3' => '全球购',
+				'4' => '城市分类'
 			]);
 			$form->switch('is_index', '首页显示')->states([
 				'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
 				'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
 			]);
 		}
-
+		$form->number('order','序号')->rules('min:0');
 		$form->text('description', '描述');
 
 		return $form;

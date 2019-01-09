@@ -38,11 +38,11 @@ class sCategoryController extends Controller
 						->branch(function ($branch) {
 
 							$icon = "<i class='fa {$branch['icon']}'></i>";
-
-							return $icon . " Id: {$branch['id']} " . $branch['title'];
+                            //" Id: {$branch['id']} "
+							return $icon  . $branch['title'];
 						});
 				}));
-
+                \Admin::script('$(function(){$(\'.dd\').nestable(\'collapseAll\');});');
 				// 新建表单
 				$row->column(6, function (Column $column) {
 					$form = new \Encore\Admin\Widgets\Form();
@@ -50,7 +50,8 @@ class sCategoryController extends Controller
 
 					$form->select('parent_id', '上级分类')->options(sCategory::selectOptions());
 					$form->text('title', '分类名')->rules('required|unique:categories,title');
-					$form->icon('icon', '图标')->default('fa-bars')->rules('required');
+                    $form->icon('icon', '图标')->default('fa-bars')->rules('required');
+                    
 					// $form->image('thumb', '缩略图')->uniqueName()->rules('required');
 
 					// $form->hidden('shop_id')->default($shop_id);

@@ -143,7 +143,7 @@ class VideoController extends Controller
         $form->display('user.name','用户');
         $form->hidden('user_id')->default(0);
         $form->select('category_id','分类')->options(sCategory::videoAll())->rules('required');
-        $form->url('link','链接')->help('请输入视频链接')->rules('required');
+        $form->file('link','视频文件')->help('请输入视频链接')->uniqueName()->rules('required')->move('video/files');
         $form->switch('status','状态');
         
 
