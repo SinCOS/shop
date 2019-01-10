@@ -11,7 +11,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class BannerController extends Controller {
+class BannerController extends Controller
+{
 	use HasResourceActions;
 
 	/**
@@ -20,7 +21,8 @@ class BannerController extends Controller {
 	 * @param Content $content
 	 * @return Content
 	 */
-	public function index(Content $content) {
+	public function index(Content $content)
+	{
 		return $content
 			->header('活动轮播图')
 			->description('description')
@@ -34,7 +36,8 @@ class BannerController extends Controller {
 	 * @param Content $content
 	 * @return Content
 	 */
-	public function show($id, Content $content) {
+	public function show($id, Content $content)
+	{
 		return $content
 			->header('Detail')
 			->description('description')
@@ -48,7 +51,8 @@ class BannerController extends Controller {
 	 * @param Content $content
 	 * @return Content
 	 */
-	public function edit($id, Content $content) {
+	public function edit($id, Content $content)
+	{
 		return $content
 			->header('编辑')
 			->description('description')
@@ -61,7 +65,8 @@ class BannerController extends Controller {
 	 * @param Content $content
 	 * @return Content
 	 */
-	public function create(Content $content) {
+	public function create(Content $content)
+	{
 		return $content
 			->header('新增')
 			->description('description')
@@ -73,32 +78,35 @@ class BannerController extends Controller {
 	 *
 	 * @return Grid
 	 */
-	protected function grid() {
+	protected function grid()
+	{
 		$grid = new Grid(new Banner);
-		$grid->filter(function($filter){
-			
-			$filter->like('name','活动名');
-			
+		$grid->filter(function ($filter) {
+
+			$filter->like('name', '活动名');
+
 		});
-		
-	
-		if(\Admin::user()->isRole('agent')){
-			$grid->model()->where('city_id',\Admin::user()->city_id);
+
+
+		if (\Admin::user()->isRole('agent')) {
+			$grid->model()->where('city_id', \Admin::user()->city_id);
 		}
-		
+
 		$grid->name('活动名');
 		$grid->column('thumb', '轮播图')->image('uploads', 100, 80);
 		// $grid->order('排序')->editable('text');
 		$grid->not_before('开始时间');
 		$grid->not_after('结束时间');
-		$grid->enabled('是否启用')->switch(['on'  => 
+		$grid->enabled('是否启用')->switch([
+			'on' =>
 				['value' => 1, 'text' => '是', 'color' => 'primary'],
-		'off' => 
+			'off' =>
 				['value' => 0, 'text' => '否', 'color' => 'default']
 		]);
 			//display(function ($true) {
 			//return $true ? '是' : '否';
 	//})
+		$grid->disableExport();
 		return $grid;
 	}
 
@@ -108,7 +116,8 @@ class BannerController extends Controller {
 	 * @param mixed $id
 	 * @return Show
 	 */
-	protected function detail($id) {
+	protected function detail($id)
+	{
 		$show = new Show(Banner::findOrFail($id));
 
 		return $show;
@@ -119,16 +128,17 @@ class BannerController extends Controller {
 	 *
 	 * @return Form
 	 */
-	protected function form() {
+	protected function form()
+	{
 		$form = new Form(new Banner);
 		$form->distpicker([
 			'province_id' => '省',
 			'city_id' => '市',
 			'district_id' => '区',
 		]);
-        $form->select('category_id','分类')->options(Category::selectOptions(function($query){
-            return $query->where('parent_id',0)->where('shop_id',0);
-        },'首页'));
+		$form->select('category_id', '分类')->options(Category::selectOptions(function ($query) {
+			return $query->where('parent_id', 0)->where('shop_id', 0);
+		}, '首页'));
 		$form->text('name', '活动名')->rules('required')->help('必填');
 		$form->image('thumb', '图片')->uniqueName()->rules('required')->help('必填');
 		// $form->url('link','活动链接');

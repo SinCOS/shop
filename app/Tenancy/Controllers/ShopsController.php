@@ -90,6 +90,9 @@ class ShopsController extends Controller {
 				$batch->disableDelete();
 			});
 		});
+		$grid->actions(function($actions){
+			//$actions->append('<a href="/shops/{$actions->getKey()}" target="_blank"><i class="fa fa-eye"></i></a>');
+		});
 		$user = \Admin::user();
 		if($user->isRole('agent')){
 			

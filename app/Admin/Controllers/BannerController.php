@@ -94,7 +94,8 @@ class BannerController extends Controller
         $grid->enabled('是否启用')->display(function($true){
             return $true ? '是' : '否' ;
         });
-
+        
+        $grid->disableExport();
         return $grid;
     }
 

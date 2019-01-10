@@ -74,6 +74,7 @@ class CategoryController extends Controller {
 							'3' => '全球购',
 							'4' => '城市分类'
 						]);
+						$form->number('rate','比率')->help('%,每笔订单提成%')->min(0)->rules('min:0')->max(100);
 					}
 
 					$form->hidden('_token')->default(csrf_token());
@@ -133,6 +134,7 @@ class CategoryController extends Controller {
 			$show->field('is_index', '首页显示')->as(function ($index) {
 				return index == 1 ? '是' : '否';
 			});
+			$show->field('rate','比率')->help('%');
 		}
 		$show->field('description', '描述');
 		$show->field('order', '排序');
@@ -179,6 +181,7 @@ class CategoryController extends Controller {
 				'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
 				'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
 			]);
+			$form->number('rate','比率')->help('%,每笔订单提成%')->min(0)->rules('min:0')->max(100);
 		}
 		$form->number('order','序号')->rules('min:0');
 		$form->text('description', '描述');

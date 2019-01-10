@@ -130,7 +130,7 @@ class AgentController extends Controller {
 		$form->select('user_id', '登录账号')->options(
 			\App\Models\User::canAgents()
 		);
-
+		$form->textarea('description','描述或者备注')->default('');
 		$form->select('agent_type', '代理类型')->options([
 			'agent' => '代理',
 			'salesman' => '业务员',

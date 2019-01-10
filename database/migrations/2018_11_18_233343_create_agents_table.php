@@ -20,6 +20,7 @@ class CreateAgentsTable extends Migration
             $table->string('province_id')->default('');
             $table->string('city_id')->default('');
             $table->string('district_id')->default('');
+            $table->string('description')->default('');
             $table->float('rate')->comment('代理比率');
             $table->softDeletes();
             $table->timestamps();

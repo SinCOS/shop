@@ -95,7 +95,7 @@ class VideoController extends Controller
         // $grid->column('thumb','预览图')->display(function($img){
         //     return "<a href='/uploads/{$img}' target='_blank'>" . \imageUrl($img?:'','admin') . "</a>";
         // });
-        $grid->column('thumb','预览图')->image('uploads',200,100);
+        $grid->column('thumb','预览图')->image('uploads',300,100);
         $grid->column('link','链接')->display(function($v){
             if(strstr($v,'http')){
                 return "<a href='{$v}' target='_blank'>点击</a>";
