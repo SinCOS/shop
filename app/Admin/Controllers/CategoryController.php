@@ -62,6 +62,10 @@ class CategoryController extends Controller {
 					$form->image('thumb', '缩略图')->uniqueName()->rules('required');
 					$form->number('order','序号')->rules('min:0');
 					$form->hidden('shop_id')->default($shop_id);
+					$form->switch('is_visible','子类显示')->states([
+							'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+							'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+					]);
 					if (\Admin::user()->isAdministrator()) {
 						$form->switch('is_index', '首页显示')->states([
 							'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
@@ -177,6 +181,10 @@ class CategoryController extends Controller {
 				'3' => '全球购',
 				'4' => '城市分类'
 			]);
+			$form->switch('is_visible','子类显示')->states([
+							'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+							'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+					]);
 			$form->switch('is_index', '首页显示')->states([
 				'on' => ['value' => 1, 'text' => '打开', 'color' => 'success'],
 				'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
