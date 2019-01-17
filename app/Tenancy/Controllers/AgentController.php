@@ -9,7 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use App\Models\Category;
 class AgentController extends Controller {
 	use HasResourceActions;
 
@@ -72,17 +72,38 @@ class AgentController extends Controller {
 	 *
 	 * @return Grid
 	 */
+
 	protected function grid() {
 		$grid = new Grid(new Agent);
 		if(\Admin::user()->isRole('agent')){
 			//$grid->model()->where('district_id');
 		}
+			$grid->filter(function ($filter) {
+			 $filter->disableIdFilter();
+			
+	
+		
+			if(\Admin::user()->isAdministrator()){
+				$filter->column(1/2,function($filter){
+					//\DB::table('district')->where('code',request('province_id',330000)->pluck('name','code'))\DB::table('district')->where('code',request('city_id',330400)
+					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
+					$filter->equal('city_id','市')->select()->load('district_id','/api/city')->default(330400);
+					$filter->equal('district_id','区')->select();
+				});
+			}
+			
+		});
+		$grid->actions(function($actions){
+			$actions->disableView();
+		});
 		$grid->column("name", '代理名');
 		$grid->column("user.name", '登录账户');
+		$grid->column('category.title','代理分类');
 		$grid->column('user.mobile', '手机号码');
 		$grid->column('agent_type', '代理类型')->display(function ($v) {
 			return $v == 'agent' ? '代理' : '业务员';
 		});
+	
 		$grid->column('city_id', '代理区域')->display(function () {
 
 		});
@@ -107,11 +128,25 @@ class AgentController extends Controller {
 	 *
 	 * @return Form
 	 */
+
 	protected function form() {
 
 		$form = new Form(new Agent);
 	
+		 $form->tools(function (Form\Tools $tools) {
 
+            // 去掉`列表`按钮
+            $tools->disableList();
+
+            // 去掉`删除`按钮
+            $tools->disableDelete();
+
+            // 去掉`查看`按钮
+            $tools->disableView();
+
+            // 添加一个按钮, 参数可以是字符串, 或者实现了Renderable或Htmlable接口的对象实例
+            // $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+        });
 		// 去掉`提交`按钮
 		// $footer->disableSubmit();
 		$form->footer(function($footer){
@@ -141,6 +176,14 @@ class AgentController extends Controller {
 			'city_id' => '市',
 			'district_id' => '区',
 		], '区域');
+		$form->select('category_id','代理分类')->options(Category::selectOptions(function($query){
+			return $query->where('parent_id',0);
+		},'首页'));
+		$form->embeds('param', '照片', function ($form) {
+			$form->image('sfzz', '身份证正面照')->uniqueName()->move('agents/');
+			$form->image('sfzf', '身份证反面照')->uniqueName()->move('agents/');
+			$form->image('yyzz', '营业执照正面照')->uniqueName()->move('agents/');
+		});
 		$form->switch('user.is_agent', '激活状态')->options([
 			'0' => '未激活',
 			'1' => '激活',

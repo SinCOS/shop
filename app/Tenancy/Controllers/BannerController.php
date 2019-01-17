@@ -82,15 +82,19 @@ class BannerController extends Controller
 	{
 		$grid = new Grid(new Banner);
 		$grid->filter(function ($filter) {
-
-			$filter->like('name', '活动名');
-
+			 $filter->disableIdFilter();
+			//$filter->like('name', '活动名');
+			$filter->equal('leixing','涮选')->radio([0=>'首页轮播',1=>'首页店铺',2=>'附近轮播' ]);
 		});
 
 
 		if (\Admin::user()->isRole('agent')) {
 			$grid->model()->where('city_id', \Admin::user()->city_id);
 		}
+
+		$grid->actions(function($actions){
+			$actions->disableView();
+		});
 
 		$grid->name('活动名');
 		$grid->column('thumb', '轮播图')->image('uploads', 100, 80);
@@ -142,7 +146,12 @@ class BannerController extends Controller
 		$form->text('name', '活动名')->rules('required')->help('必填');
 		$form->image('thumb', '图片')->uniqueName()->rules('required')->help('必填');
 		// $form->url('link','活动链接');
-
+		$form->radio('leixing','类型')->options([0=>'首页轮播',1=>'首页店铺','2' =>'附近轮播']);
+		$form->radio('leixing2','类型')->options([
+			'0' => '店铺',
+			'1' => '活动 '
+		]);
+		$form->text('huodong_id','活动')->help('请输入店铺Id或者活动Id');
 		$form->datetimeRange('not_before', 'not_after', '活动时间')->help('必填');
 
 		$form->switch('enabled', '启用')->options(['1' => '是', '0' => '否'])->default(1);

@@ -76,12 +76,22 @@ class ShopsController extends Controller {
 	protected function grid() {
 		$grid = new Grid(new Shop);
 		$grid->filter(function ($filter) {
-			$filter->equal('status', '状态')->select(Shop::SHOP_STATUS);
+			 $filter->disableIdFilter();
+			
 			$filter->like('title', '店铺名');
 			$filter->like('address', '地址');
+			$filter->column(1/2,function($filter){
+				$filter->equal('cat_id','分类')->select(Category::selectOptions(null,'首页'));
+				$filter->equal('status', '状态')->select(Shop::SHOP_STATUS);
+			});
+		
 			if(\Admin::user()->isAdministrator()){
-				$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city');
-				$filter->equal('city_id','市')->select();
+				$filter->column(1/2,function($filter){
+					//\DB::table('district')->where('code',request('province_id',330000)->pluck('name','code'))\DB::table('district')->where('code',request('city_id',330400)
+					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
+					$filter->equal('city_id','市')->select()->load('district_id','/api/city')->default(330400);
+					$filter->equal('district_id','区')->select();
+				});
 			}
 			
 		});

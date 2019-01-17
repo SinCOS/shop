@@ -8,9 +8,11 @@ Route::group(['domain' => 'hjt.lxrs.net'], function (Router $router) {
 		$provinceId = request()->get('q');
 		//return $provinceId;
 		$id = \DB::table('district')->where('code',$provinceId)->select(['id'])->get()->toArray();
-    	return \DB::table('district')->where('parent_id', $id[0]->id)->select(['code', \DB::raw('name as text')])->get();
+		
+    	return \DB::table('district')->where('parent_id', $id[0]->id)->select([\DB::raw('code as id'),\DB::raw('name as text')])->get();
 	});
 });
+
 Route::group([
 	'domain' => 'hjt.lxrs.net',
 	// 'namespace' => config('tenancy.route.namespace'),

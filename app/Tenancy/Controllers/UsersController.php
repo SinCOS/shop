@@ -80,6 +80,7 @@ class UsersController extends Controller {
 		$grid->filter(function ($filter) {
 			$filter->like('username', '账户名');
 			$filter->equal('mobile', '手机号码')->mobile();
+			//$filter->equal('sex','性别')
 			// $filter->like('name', '用户名');
 		});
 		$grid->actions(function ($actions) {
@@ -88,16 +89,17 @@ class UsersController extends Controller {
 		});
 		$grid->disableExport();
 		$grid->disableCreation();
-		$grid->tools(function ($tools) {
-			//关闭批量删除
-			$tools->batch(function ($batch) {
-				$batch->disableDelete();
-			});
-		});
+		$grid->disableRowSelector();
+		// $grid->tools(function ($tools) {
+		// 	//关闭批量删除
+		// 	$tools->batch(function ($batch) {
+		// 		$batch->disableDelete();
+		// 	});
+		// });
 		// 排序最新的
 		$grid->model()->latest();
 
-		$grid->column('id', 'Id');
+		// $grid->column('id', 'Id');
 		$grid->column('username', '账户名');
 		$grid->column('name', '昵称');
 		$grid->column('sex', '性别')->display(function ($sex) {

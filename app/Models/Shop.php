@@ -65,9 +65,18 @@ class Shop extends Model
         return $this->belongsTo(Agent::class, 'work_id');
     }
     public function setThumbAttribute($val){
-        if(is_array($val)){
-             $this->attributes['thumb'] = json_encode($val);
+        $array = json_decode($this->attributes['thumb'],true);
+        if(isset($val['sfzz'])){
+            $array['sfzz'] = $val['sfzz'];
         }
+        if(isset($val['sfzf'])){
+            $array['sfzf'] = $val['sfzf'];
+        }
+         if(isset($val['yyzz'])){
+            $array['yyzz'] = $val['yyzz'];
+        }
+        
+             $this->attributes['thumb'] = json_encode($array);
        
     }
     public function setAreaAttribute($val){
