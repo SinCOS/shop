@@ -238,7 +238,7 @@ class ShopsController extends Controller {
     // 'district_id' => '区']);
 //JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX
 
-		$form->text('title', '店铺名称');
+		$form->text('title', '店铺名称')->rules('required|min:6')->help('最少6个字符');
 		$form->image('background_image', '背景图片')->uniqueName();
 		$form->select('status', '状态')->options(Shop::SHOP_STATUS);
 		$form->text('concat_phone', '联系电话');
@@ -282,12 +282,25 @@ class ShopsController extends Controller {
 			$form->image('sfzf', '身份证反面照')->uniqueName();
 			$form->image('yyzz', '营业执照正面照')->uniqueName();
 		});
+		$form->saving(function($form){
+			if ($form->status == Shop::SHOP_STATUS_NORMAL && $form->model()->status == Shop::SHOP_STATUS_APPLY) {
+				if (!\DB::table('admin_role_users')->where('user_id', $form->user_id)->first()) {
+					\DB::table('admin_role_users')->insert([
+						'role_id' => 2,
+						'user_id' => $form->model()->user_id,
+					]);
+				}
+
+			}
+		});
 		$form->saved(function($form){
 			$user = $form->model()->user;;
 			//dd($user->toJson());
 			if($form->status == Shop::SHOP_STATUS_NORMAL  && $user && $user->shop_id == 0){
-				$form->model()->user->update(['shop_id' => $form->model()->id]);
+				$form->model()->user->update(['shop_id' => $form->model()->id, 'password' => bcrypt($user->mobile)]);
+	
 			}
+			
 		});
 		return $form;
 	}

@@ -307,7 +307,7 @@ class ProductsController extends Controller {
                     //Admin::js('/vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js');
                 $form->number('stock','库存')->min(0)->rules('required|integer|min:0');
                 $form->currency('price','销售价');
-                $form->currency('price_on_app','平台价')->rules('required')->help('');
+                $form->hidden('price_on_app')->default(0.00);
 				$form->number('max_buy', '用户单次最多购买')->min(0)->default(0)->rules('required|integer|min:0')->help('0 为不限制');
 
 				$form->radio('dispatchtype', '运费设置')->options(['1' => '统一邮费', '0' =>

@@ -21,8 +21,8 @@ class AgentController extends Controller {
 	 */
 	public function index(Content $content) {
 		return $content
-			->header('Index')
-			->description('description')
+			->header('代理列表')
+			// ->description('description')
 			->body($this->grid());
 	}
 
@@ -49,8 +49,8 @@ class AgentController extends Controller {
 	 */
 	public function edit($id, Content $content) {
 		return $content
-			->header('Edit')
-			->description('description')
+			->header('编辑')
+			// ->description('description')
 			->body($this->form()->edit($id));
 	}
 
@@ -62,8 +62,8 @@ class AgentController extends Controller {
 	 */
 	public function create(Content $content) {
 		return $content
-			->header('Create')
-			->description('description')
+			->header('创建')
+			// ->description('description')
 			->body($this->form());
 	}
 
@@ -161,16 +161,20 @@ class AgentController extends Controller {
 		
 
 		
-		$form->text('name', '代理用户');
+		$form->text('name', '代理用户')->rules('required|min:3')->help('最少三个字符');
 		$form->select('user_id', '登录账号')->options(
 			\App\Models\User::canAgents()
-		);
+		)->help('必填，已存在用户的手机号码')->rules(function($form){
+			if(!$id = $form->model()->id) {
+				
+			}
+		});
 		$form->textarea('description','描述或者备注')->default('');
 		$form->select('agent_type', '代理类型')->options([
 			'agent' => '代理',
 			'salesman' => '业务员',
-		]);
-		$form->rate('rate', '利率');
+		])->default('agent');
+		$form->rate('rate', '利率')->default(0);
 		$form->distpicker([
 			'province_id' => '省',
 			'city_id' => '市',
