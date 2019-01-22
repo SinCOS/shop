@@ -81,9 +81,9 @@ class BannerController extends Controller
     {
         $grid = new Grid(new Banner);
         $user = \Admin::user();
-        if($user->iscan('bannber')){
-            $grid->model()->where('city_id',$user->agent()->city_id);
-        }
+        // if($user->iscan('bannber')){
+        //     $grid->model()->where('city_id',$user->agent()->city_id);
+        // }
         $grid->name('活动名');
         $grid->column('thumb','轮播图')->display(function($img){
             return imageUrl($img?:'','admin');

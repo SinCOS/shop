@@ -318,7 +318,7 @@ class ProductsController extends Controller {
 				$form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('0');
 
 			})->tab('商品描述', function ($form) {
-				$form->editor('body', '商品描述')->rules('required');
+				$form->editor('body', '商品描述')->rules('required')->default('稍后填写');
 			})->tab('规格', function ($form) {
 				// 直接添加一对多的关联模型
 				//$('.iCheck-helper').click(function(){alert($('input[name="is_sku"]:checked').val());});

@@ -104,9 +104,9 @@ class AgentController extends Controller {
 			return $v == 'agent' ? '代理' : '业务员';
 		});
 	
-		$grid->column('city_id', '代理区域')->display(function () {
+		// $grid->column('city_id', '代理区域')->display(function () {
 
-		});
+		// });
 
 		return $grid;
 	}

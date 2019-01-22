@@ -124,7 +124,7 @@ class ShopsController extends Controller {
 		$grid->id('Id');
 		$grid->column('user.name','管理用户');
 		$grid->title('店铺名');
-		$grid->logo('Logo')->image('uploads',100,85);
+		$grid->logo('Logo')->image('',100,85);
 		$grid->column('category.title','商铺分类');
 		// $grid->background_image('Background image');
 		$grid->status('状态')->display(function($status){

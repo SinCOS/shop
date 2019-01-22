@@ -26,13 +26,13 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
     $router->get('/home', 'HomeController@index');
-
+    $router->resource('banners','\App\Tenancy\Controllers\BannerController');
     $router->resource('category', 'CategoryController');
     $router->get('setting','ShopController@edit');//->only('edit,show');
     $router->put('setting','ShopController@update');
     $router->resource('shops','\App\Tenancy\Controllers\ShopsController');
     $router->resource('videos','VideoController');
-    $router->resource('banners','BannerController');
+    // $router->resource('banners','BannerController');
     $router->get('auth/login', 'AuthController@getLogin');
     $router->post('auth/login', 'AuthController@postLogin');
     $router->get('products', 'ProductsController@index');
@@ -53,7 +53,7 @@ Route::group([
     $router->delete('coupon_codes/{id}', 'CouponCodesController@destroy');
     $router->resource('/stats','StatsController');
     $router->resource('/dispatch','DispatchController');
-    
+    $router->resource('/activity','ActivityController');
     $router->post('upload/editor', 'UploadController@uploadByEditor');
     $router->post('upload/file-input', 'UploadController@uploadByFileInput')->name('upload.file-input');
 });

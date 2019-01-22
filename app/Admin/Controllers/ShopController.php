@@ -127,7 +127,7 @@ class ShopController extends Controller
     // 'district_id' => '区']);
 //JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX
 
-        $form->display('title', '店铺名称');
+        $form->text('title', '店铺名称')->rules('required:min:6')->help('必填*,最少6个字符');
         $form->image('background_image', '背景图片')->uniqueName()->move('shops/')->help('尺寸750x200');
         $form->display('status', '状态');//->options(['0' => '待审核', '1' => '正常营业', '-1' => '已关闭']);
         $form->text('concat_phone', '联系电话');

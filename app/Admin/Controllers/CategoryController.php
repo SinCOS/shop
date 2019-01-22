@@ -72,10 +72,10 @@ class CategoryController extends Controller {
 							'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
 						]);
 						$form->select('type', '类型')->options([
-							'0' => '正常',
-							'1' => '核销',
-							'2' => '其他',
-							'3' => '全球购',
+							'0' => '配送类',
+							'1' => '核销类',
+							'2' => '酒店类',
+							'3' => '贝贝国际',
 							'4' => '城市分类'
 						]);
 						$form->number('rate','比率')->help('%,每笔订单提成%')->min(0)->rules('min:0')->max(100);
@@ -175,10 +175,10 @@ class CategoryController extends Controller {
 		if (\Admin::user()->isAdministrator()) {
 
 			$form->select('type', '类型')->options([
-				'0' => '正常',
-				'1' => '核销',
-				'2' => '其他',
-				'3' => '全球购',
+				'0' => '配送类',
+				'1' => '核销类',
+				'2' => '酒店类',
+				'3' => '贝贝国际',
 				'4' => '城市分类'
 			]);
 			$form->switch('is_visible','子类显示')->states([

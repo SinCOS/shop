@@ -52,7 +52,7 @@ class User extends Authenticatable
         return $this->hasMany(CartItem::class);
     }
     public static function canAgents(){
-        return self::query()->latest()->pluck('mobile', 'id');
+        return self::query()->latest()->where('shop_id',0)->pluck('mobile', 'id');
     }
     public function favoriteProducts()
     {

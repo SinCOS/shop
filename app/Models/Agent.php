@@ -43,7 +43,7 @@ class Agent extends Model
     	parent::boot();
     	static::deleting(function($agent){
             \App\Models\User::where('id',$agent->user_id)->update(['is_agent' => 0]);
-			\DB::table('admin_role_users')->where('user_id', $agent->user_id)->delete();
+			\DB::table('admin_role_users')->where('user_id', $agent->user_id)->where('role_id',3)->delete();
     	});
     }
 

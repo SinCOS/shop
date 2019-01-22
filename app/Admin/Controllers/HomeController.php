@@ -21,10 +21,11 @@ class HomeController extends Controller
             $content->description('Description...');
 
             $content->row('<h2 align="center">信息控制台</a>');
+            if(\Admin::user()->isRole('operator')){
             $content->row(new Box('最近7天增长趋势图', view('admin.chart',['data' => \App\Admin\Model\OrderCommon::getDays(7),'height' => 400])));
             $content->row(function (Row $row) {
 
-              
+                
 
                 $row->column(12, function (Column $column) {
                     // $order = \App\Models\Order::where('shop_id', \Admin::user()->shop_id)->select();
@@ -34,11 +35,35 @@ class HomeController extends Controller
                     // $order = \App\Models\Order::where('shop_id', \Admin::user()->shop_id)->select();
                     $column->append(new Box('综合统计', new Table(['售完商品', '最近7天评论', '未上架商品'], [[0, 0, 0]])));
                 });
-                $row->column(4, function (Column $column) {
-                    $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::find(\Admin::user()->shop_id)->money, 'bill', 'warning', '/orders', '
-                    钱包'));
-                });
+               
+                    $row->column(4, function (Column $column) {
+                        $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::find(\Admin::user()->shop_id)->money, 'bill', 'warning', '/orders', '
+                        钱包'));
+                    });
+                
+         
             });
+        }elseif (\Admin::user()->isRole('agent')) {
+            $content->row(new Box('欢迎使用','~~~~~'));
+           $content->row(function(Row $row){
+               $row->column(4,function($column){
+                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',0)->count(), 'bill', 'warning', '/shops?status=0', '
+                待审核商家'));
+                
+               });
+               $row->column(4,function($column){
+                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',1)->count(), 'bill', 'success', '/shops?status=1', '
+                正常运营店铺'));
+                
+               });
+
+               $row->column(4,function($column){
+                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Activity::count(), 'bill', 'info', '/activity', '
+                活动统计'));
+                
+               });
+           });
+        }
         });
     }
 }

@@ -48,9 +48,9 @@
              var len = $("#spec_" + specid + " .spec_item_title").length - 1;
              $("#spec_" + specid + " .spec_item_title:eq(" + len + ")").focus();
              window.optionchanged = true;
-             if (type == 3 && virtual == 0) {
-                 $(".choosetemp").show();
-             }
+            //  if (type == 3 && virtual == 0) {
+            //      $(".choosetemp").show();
+            //  }
          }
      });
  }
