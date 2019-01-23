@@ -37,7 +37,9 @@ class HomeController extends Controller
                 });
                
                     $row->column(4, function (Column $column) {
-                        $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::find(\Admin::user()->shop_id)->money, 'bill', 'warning', '/orders', '
+                        $shop_id = \Admin::user()->shop_id;
+                        if($shop_id == 0){return ;}
+                        $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::find($shop_id)->money, 'bill', 'warning', '/orders', '
                         钱包'));
                     });
                 

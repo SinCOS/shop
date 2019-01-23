@@ -5,8 +5,11 @@ Route::group(['domain' => 'business.lxrs.net'], function () {
 
     Admin::registerAuthRoutes();
     Route::get('/',function(){
-        return Redirect::to('/home');
+return Redirect::to('/home');
 });
+
+Route::post('upload/editor', '\App\Admin\Controllers\UploadController@uploadByEditor');
+Route::post('upload/file-input', '\App\Admin\Controllers\UploadController@uploadByFileInput')->name('upload.file-input');
 });
 
 Admin::registerAuthRoutes();
@@ -54,6 +57,5 @@ Route::group([
     $router->resource('/stats','StatsController');
     $router->resource('/dispatch','DispatchController');
     $router->resource('/activity','ActivityController');
-    $router->post('upload/editor', 'UploadController@uploadByEditor');
-    $router->post('upload/file-input', 'UploadController@uploadByFileInput')->name('upload.file-input');
+   
 });

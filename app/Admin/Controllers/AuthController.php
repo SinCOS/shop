@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use Encore\Admin\Controllers\AuthController as BaseAuthController;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 class AuthController extends BaseAuthController
 {
 	public function getLogin(){
@@ -15,9 +16,14 @@ class AuthController extends BaseAuthController
 	public function postLogin(Request $request){
 		$credentials = $request->only(['username','password','captcha']);
 		$validator = \Validator::make($credentials,[
-			'username' => 'required|string', //shop_id,!0
+			'username' => ['required','string',
+				Rule::exists('users')->where(function($query){
+				$query->where('shop_id','>',0)->orWhere('is_agent','>',0);
+			})
+		], //shop_id,!0
 			'password' => 'required',
-			'captcha' =>'required|captcha'
+			'captcha' =>'required|captcha',
+		
 		],[
 			'exists' => '用户不存在'
 
