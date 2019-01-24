@@ -30,7 +30,14 @@ class Category extends Model
     {
         return self::query()->orderBy('order')->latest()->get();
     }
+    // public static function selectedOptions()
+    // {
+    // 	$options = Category::where('parent_id',0)->orderby('order')->get()->toArray();
+    // 	if (!empty($options))
+    //     	$options = (new static())->buildSelectOptions($options);
 
+    //     return collect($options)->prepend('Root',0)->all();
+    // }
     public static function selectOrderAll()
     {
         return self::query()->orderBy('order')->latest()->pluck('title', 'id');

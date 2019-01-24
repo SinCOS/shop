@@ -75,7 +75,9 @@ class Shop extends Model
          if(isset($val['yyzz'])){
             $array['yyzz'] = $val['yyzz'];
         }
-        
+        if(isset($val['jyxkz'])){
+            $array['jyxkz'] = $val['jyxkz'];
+        }
              $this->attributes['thumb'] = json_encode($array);
        
     }

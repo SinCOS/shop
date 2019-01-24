@@ -232,10 +232,10 @@ class ShopsController extends Controller {
 			}
 
 		});
-    //     $form->distpicker([
-    //          'province_id' => '省',
-    // 'city_id'     => '市',
-    // 'district_id' => '区']);
+        $form->distpicker([
+             'province_id' => '省',
+    'city_id'     => '市',
+    'district_id' => '区']);
 //JDPBZ-UF3HX-DXB4X-7QHYL-PVZ6F-4OBHX
 
 		$form->text('title', '店铺名称')->rules('required|min:6')->help('最少6个字符');
@@ -250,17 +250,20 @@ class ShopsController extends Controller {
 		//     $form->display('note', 'Note');
 		// }
 
-		
+
+
 		$form->rate('serve_rating', '服务评分')->default(5.00);
 		$form->rate('speed_rating', '速度评分')->default(5.00);
-		$form->display('agent_id', '市级代理');
-		$form->display('work_id', '业务员');
+		$form->select('agent_id', '代理')->options(\App\Models\Agent::pluck('name','id'));
+		// $form->select('work_id', '业务员');
 		// if(\Admin::user()->isAdministrator()){
 		// 	$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function ($query) {
 		// 		return $query->where('shop_id', '=', 0);
 		// 	}, '请选择'))->rules('required|exists:categories,id');
 		// }else{
-			$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions());
+			$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function($query){
+				return $query->where('shop_id',0)->where('id','<>',30);
+			}));
 		// }
 		
 		// $form->display('cat_id', '店铺所属分类')->with(function($cat_id){
@@ -281,6 +284,7 @@ class ShopsController extends Controller {
 			$form->image('sfzz', '身份证正面照')->uniqueName();
 			$form->image('sfzf', '身份证反面照')->uniqueName();
 			$form->image('yyzz', '营业执照正面照')->uniqueName();
+			$form->image('jyxkz','经营许可证')->uniqueName();
 		});
 		$form->saving(function($form){
 			if ($form->status == Shop::SHOP_STATUS_NORMAL && $form->model()->status == Shop::SHOP_STATUS_APPLY) {

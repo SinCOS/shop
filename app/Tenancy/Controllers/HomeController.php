@@ -28,7 +28,18 @@ class HomeController extends Controller
                     $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Order::count(), 'bill', 'warning', '/orders', '
                     订单数'));
                 });
-
+                $row->column(4,function(Column $column){
+                     $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',0)->count(), 'bill', 'danger', '/shops?status=0', '
+                    店铺申请'));
+                });
+                 $row->column(4,function(Column $column){
+                     $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',1)->count(), 'bill', 'success', '/shops?status=1', '
+                    正常运营'));
+                });
+                 $row->column(4,function(Column $column){
+                     $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',3)->count(), 'bill', 'danger', '/shops?status=3', '
+                    关闭店铺'));
+                });
                 $row->column(4, function (Column $column) {
                     $column->append(new Box('版本信息',new Table([],[
                         '版本信息' => 1.1,

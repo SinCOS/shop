@@ -59,7 +59,7 @@ class CategoryController extends Controller {
 						}));
 					$form->text('title', '分类名')->rules('required|unique:categories,title');
 					$form->icon('icon', '图标')->default('fa-bars')->rules('required');
-					$form->image('thumb', '缩略图')->uniqueName()->rules('required');
+					$form->image('thumb', '缩略图')->uniqueName();
 					$form->number('order','序号')->rules('min:0');
 					$form->hidden('shop_id')->default($shop_id);
 					$form->switch('is_visible','子类显示')->states([
@@ -170,7 +170,7 @@ class CategoryController extends Controller {
 			Category::selectOptions(function($query)use($shop_id){
 				return $query->where('shop_id',$shop_id);
 			}));
-		$form->image('thumb', '缩略图')->uniqueName()->rules('required');
+		$form->image('thumb', '缩略图')->uniqueName();
 		$form->hidden('shop_id')->default($shop_id);
 		if (\Admin::user()->isAdministrator()) {
 

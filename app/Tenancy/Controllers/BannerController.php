@@ -30,7 +30,7 @@ class BannerController extends Controller
 			->description('description')
 			->body('<script>alert("请联系市管理员添加");window.location = "/";</script>');
 		}
-		$grid->model()->where('city_id', \Admin::user()->city_id);
+		
 	}
 		return $content
 			->header('活动轮播图')
@@ -96,7 +96,7 @@ class BannerController extends Controller
 			//$filter->like('name', '活动名');
 			$arr = [0=>'轮播',1=>'首页店铺',];
 		//if(\Admin::user()->isAdministrator())
-			$arr[2]='附近轮播';
+			//$arr[2]='附近轮播';
 			$filter->equal('leixing','涮选')->radio($arr);
 		});
 
@@ -161,7 +161,7 @@ class BannerController extends Controller
 		$form->text('name', '活动名')->rules('required')->help('必填');
 		$form->image('thumb', '图片')->uniqueName()->rules('required')->help('必填');
 		// $form->url('link','活动链接');
-		$form->radio('leixing','类型')->options([0=>'轮播',1=>'首页店铺','2' =>'附近轮播']);
+		$form->radio('leixing','类型')->options([0=>'轮播',1=>'首页店铺']); //,'2' =>'附近轮播'
 		$form->radio('leixing2','类型')->options([
 			'0' => '店铺',
 			'1' => '活动 '
