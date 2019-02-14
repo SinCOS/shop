@@ -60,8 +60,11 @@ class ProductsController extends Controller {
 	 */
 	protected function grid() {
 		return Admin::grid(Product::class, function (Grid $grid) {
-			
-            $grid->model()->where('shop_id','=',\Admin::user()->shop_id);
+            
+      
+                $grid->model()->where('shop_id','=',\Admin::user()->shop_id);
+          
+           
 			$grid->product_ssn('产品SSN')->sortable();
 
             $grid->column('category.title', '分类');
@@ -271,13 +274,16 @@ class ProductsController extends Controller {
         });
 
 
-            $shop_id = \Admin::user()->shop_id;
+            $shop_id = \Admin::user()->shop_id ?: 0;
 			$form->tab('商品信息', function ($form) use($shop_id){
 				// 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
            
 				$form->select('category_id', '分类')->options(Category::selectOptions(function($query)use($shop_id){
+                   if($shop_id == 1){
+                    return  $query->where('shop_id',0);
+                   }
                     return $query->where('shop_id',$shop_id);
-                }, '请选择'));
+                }, '请选择',$shop_id ==1 ? 30 : 0));
                 $form->text('product_ssn','产品SSN')->rules('required');
 				$form->text('title', '商品名称')->rules('required');
 				// 创建一个选择图片的框

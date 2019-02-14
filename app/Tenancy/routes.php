@@ -25,6 +25,7 @@ Route::group([
     	$router->post('auth/login', 'AuthController@postLogin');
 		$router->resource('users', 'UsersController');
 		$router->resource('category', '\App\Admin\Controllers\CategoryController');
+		$router->resource('goods','\App\Admin\Controllers\ProductsController');
 		$router->resource('shops','ShopsController');
 		$router->resource('banners',"BannerController");
 		$router->resource('videos',"VideoController");

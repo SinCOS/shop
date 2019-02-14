@@ -25,6 +25,12 @@ class Category extends Model
     public static function adminAll(){
     	return self::query()->where('shop_id',0)->orderBy('order')->pluck('title','id');
     }
+    public static function selectOptions(\Closure $closure = null, $rootText = 'Root',$number = 0 )
+    {
+        $options = (new static())->withQuery($closure)->buildSelectOptions([],$number);
+
+        return collect($options)->prepend($rootText, 0)->all();
+    }
 
     public static function orderAll()
     {

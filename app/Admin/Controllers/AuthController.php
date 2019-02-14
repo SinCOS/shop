@@ -17,7 +17,7 @@ class AuthController extends BaseAuthController
 		$credentials = $request->only(['username','password','captcha']);
 		$validator = \Validator::make($credentials,[
 			'username' => ['required','string',
-				Rule::exists('users')->where(function($query){
+				Rule::exists('users','mobile')->where(function($query){
 				$query->where('shop_id','>',0)->orWhere('is_agent','>',0);
 			})
 		], //shop_id,!0

@@ -28,6 +28,9 @@ class CategoryController extends Controller {
 		} elseif (\Admin::user()->can('category')) {
             $shop_id = \Admin::user()->shop_id;
 		}
+		if($shop_id == 1){
+			return $content->header('请到系统后台分类菜单修改');
+		}
 		return $content
 			->header('商品分类')
 			->description('description')

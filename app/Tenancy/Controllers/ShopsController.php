@@ -95,11 +95,13 @@ class ShopsController extends Controller {
 			}
 			
 		});
+	
 		$grid->tools(function ($tools) {
 			$tools->batch(function ($batch) {
 				$batch->disableDelete();
 			});
 		});
+		$grid->model()->whereNotIn('id',[1]);
 		$grid->actions(function($actions){
 			//$actions->append('<a href="/shops/{$actions->getKey()}" target="_blank"><i class="fa fa-eye"></i></a>');
 		});
@@ -116,12 +118,18 @@ class ShopsController extends Controller {
 		$grid->disableExport();
 		$grid->disableCreateButton();
 		$grid->actions(function ($actions) {
+			if($actions->getKey() == 1){
+				
+			}
 			$actions->disableDelete();
 
 			// $actions->disableEdit();
 			// $actions->disableView();
 		});
-		$grid->id('Id');
+		//$grid->disableRowSelector();
+		$grid->id('Id')->display(function($id){
+			return $id == 1 ? '系统店铺' : $id;
+		});
 		$grid->column('user.name','管理用户');
 		$grid->title('店铺名');
 		$grid->logo('Logo')->image('',100,85);
@@ -254,7 +262,7 @@ class ShopsController extends Controller {
 
 		$form->rate('serve_rating', '服务评分')->default(5.00);
 		$form->rate('speed_rating', '速度评分')->default(5.00);
-		$form->select('agent_id', '代理')->options(\App\Models\Agent::pluck('name','id'));
+		$form->select('agent_id', '代理')->options(\App\Models\Agent::pluck('name','id'))->rules('required');
 		// $form->select('work_id', '业务员');
 		// if(\Admin::user()->isAdministrator()){
 		// 	$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function ($query) {
