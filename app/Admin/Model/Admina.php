@@ -53,7 +53,9 @@ class Admina extends Model implements AuthenticatableContract
     public function getAvatarAttribute($avatar)
     {
         $disk = config('admin.upload.disk');
-
+        if($avatar && strstr($avatar,'http')){
+            return $avatar;
+        }
         if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
             return Storage::disk(config('admin.upload.disk'))->url($avatar);
         }
