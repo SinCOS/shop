@@ -61,7 +61,15 @@ class ProductsController extends Controller {
 	protected function grid() {
 		return Admin::grid(Product::class, function (Grid $grid) {
             
-      
+            $grid->filter(function($filter){
+                $shop_id = \Admin::user()->shop_id ?:0;
+                $filter->equal('category_id','分类')->select(Category::selectOptions(function($query)use($shop_id){
+                    if($shop_id == 1){
+                     return  $query->where('shop_id',0);
+                    }
+                     return $query->where('shop_id',$shop_id);
+                 }, '请选择',$shop_id ==1 ? 30 : 0));
+            });
                 $grid->model()->where('shop_id','=',\Admin::user()->shop_id);
           
            
