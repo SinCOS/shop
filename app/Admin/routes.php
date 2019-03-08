@@ -35,6 +35,9 @@ Route::group([
     $router->put('setting','ShopController@update');
     $router->resource('shops','\App\Tenancy\Controllers\ShopsController');
     $router->resource('videos','VideoController');
+    $router->resource('dispatchV','DispatchVController',['only' => [
+        'update','edit','create','index','store'
+    ]]);
     // $router->resource('banners','BannerController');
     $router->get('auth/login', 'AuthController@getLogin');
     $router->post('auth/login', 'AuthController@postLogin');
