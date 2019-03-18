@@ -115,7 +115,11 @@ class DispatchVController extends Controller
         $form->text("title",'方案名')->rules('required|min:3')->help('*,最少三个字符');
        
         $form->hidden('shop_id')->default(\Admin::user()->shop_id);
-        $form->checkbox('include','省份')->options(\DB::table('district')->where('parent_id',0)->pluck('name','id'));
+        $form->hasMany('areas','范围',function(Form\NestedForm $form){
+            
+            $form->checkbox('area','省份')->options(\DB::table('district')->where('parent_id',0)->pluck('name','id'));
+            $form->currency('price','价格')->default(0);
+        });
         $form->currency('price','价格')->default(0);
         return $form;
     }
