@@ -62,7 +62,7 @@ class DiyMap extends Field
                 $this->useYandexMap();
                 break;
             default:
-                $this->useGoogleMap();
+                $this->useTencentMap();
         }
     }
 

@@ -88,7 +88,7 @@ class ShopsController extends Controller {
 			if(\Admin::user()->isAdministrator()){
 				$filter->column(1/2,function($filter){
 					//\DB::table('district')->where('code',request('province_id',330000)->pluck('name','code'))\DB::table('district')->where('code',request('city_id',330400)
-					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
+					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',1)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
 					$filter->equal('city_id','市')->select()->load('district_id','/api/city')->default(330400);
 					$filter->equal('district_id','区')->select();
 				});

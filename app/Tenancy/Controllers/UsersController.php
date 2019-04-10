@@ -152,6 +152,12 @@ class UsersController extends Controller {
 		$show->field('created_at', '创建时间');
 		$show->field('updated_at', '修改时间');
 
+		$show->panel()
+			->tools(function ($tools) {
+				$tools->disableEdit();
+				$tools->disableList();
+				$tools->disableDelete();
+			});;
 		return $show;
 	}
 
@@ -198,7 +204,37 @@ class UsersController extends Controller {
 					$form->password = bcrypt($form->password);
 				}
 			});
-			
+			$form->tools(function (Form\Tools $tools) {
+
+				// Disable `List` btn.
+				$tools->disableList();
+
+				// Disable `Delete` btn.
+				$tools->disableDelete();
+
+				// Disable `Veiw` btn.
+				$tools->disableView();
+
+				// Add a button, the argument can be a string, or an instance of the object that implements the Renderable or Htmlable interface
+				//$tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+			});
+			$form->footer(function ($footer) {
+
+				// disable reset btn
+				$footer->disableReset();
+
+				// disable submit btn
+				//$footer->disableSubmit();
+
+				// disable `View` checkbox
+				$footer->disableViewCheck();
+
+				// disable `Continue editing` checkbox
+				$footer->disableEditingCheck();
+
+				// disable `Continue Creating` checkbox
+				$footer->disableCreatingCheck();
+			});
 			return $form;
 		});
 	}

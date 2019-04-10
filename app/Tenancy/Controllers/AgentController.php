@@ -86,7 +86,7 @@ class AgentController extends Controller {
 			if(\Admin::user()->isAdministrator()){
 				$filter->column(1/2,function($filter){
 					//\DB::table('district')->where('code',request('province_id',330000)->pluck('name','code'))\DB::table('district')->where('code',request('city_id',330400)
-					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
+					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',1)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
 					$filter->equal('city_id','市')->select()->load('district_id','/api/city')->default(330400);
 					$filter->equal('district_id','区')->select();
 				});
@@ -104,9 +104,9 @@ class AgentController extends Controller {
 			return $v == 'agent' ? '代理' : '业务员';
 		});
 	
-		// $grid->column('city_id', '代理区域')->display(function () {
+		$grid->column('city_id', '代理区域')->display(function () {
 
-		// });
+		});
 
 		return $grid;
 	}
@@ -166,7 +166,7 @@ class AgentController extends Controller {
 			\App\Models\User::canAgents()
 		)->help('必填，已存在用户的手机号码')->rules(function($form){
 			if(!$id = $form->model()->id) {
-				
+				return 'unique:users,mobile';
 			}
 		});
 		$form->textarea('description','描述或者备注')->default('');
@@ -197,6 +197,10 @@ class AgentController extends Controller {
 			if ($form->user['is_agent'] == 'on') {
 
 				if (!\DB::table('admin_role_users')->where('user_id', $form->user_id)->first()) {
+					// $user = $form->model()->user;
+					// if(isEmpty($user->password)){
+					// 	$form->model()->user->update(['shop_id' => $form->model()->id, 'password' => bcrypt($user->mobile)]);
+					// }
 					\DB::table('admin_role_users')->insert([
 						'role_id' => $form->agent_type =='agent' ? 3 : 4,
 						'user_id' => $form->user_id,
