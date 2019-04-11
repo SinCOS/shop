@@ -102,9 +102,9 @@ class UsersController extends Controller {
 		// $grid->column('id', 'Id');
 		$grid->column('username', '账户名');
 		$grid->column('name', '昵称');
-		$grid->column('sex', '性别')->display(function ($sex) {
-			return User::SEXES[$sex] ?? '未知';
-		});
+		// $grid->column('sex', '性别')->display(function ($sex) {
+		// 	return User::SEXES[$sex] ?? '未知';
+		// });
 		$grid->column('mobile', '手机');
 		$grid->column('avatar', '头像')->image('uploads',40,40);
 		// $grid->column('github_name', 'Github昵称');
@@ -133,9 +133,9 @@ class UsersController extends Controller {
 
 		$show->field('id', 'Id');
 		$show->field('name', '用户名');
-		$show->field('sex', '性别')->as(function ($sex) {
-			return User::SEXES[$sex] ?? '未知';
-		});
+		// $show->field('sex', '性别')->as(function ($sex) {
+		// 	return User::SEXES[$sex] ?? '未知';
+		// });
 		$show->field('mobile', '手机号码');
 		$show->field('avatar', '头像')->as(function ($avatar) {
 			return imageUrl($avatar);
@@ -183,7 +183,7 @@ class UsersController extends Controller {
 
 			// 	return $rules;
 			// });
-			$form->select('sex', '性别')->rules('required|in:0,1')->options(User::SEXES)->default(1);
+			//$form->select('sex', '性别')->rules('required|in:0,1')->options(User::SEXES)->default(1);
 			$form->display('mobile', '手机号码');
 			// ->rules(function (Form $form) {
 			//     $rules = 'required|unique:users,mobile|regex:/^1[34578][0-9]{9}$/';
