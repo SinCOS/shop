@@ -27,6 +27,9 @@ class Shop extends Model
         self::SHOP_STATUS_CLOSED => '店铺关闭'
     ];
     protected $table ='shop';
+    protected $appends = [
+        'area'
+    ];
     protected $fillabled = [
         'title',
         'logo',
@@ -45,7 +48,7 @@ class Shop extends Model
         'speed_rating' //速度评分
     ];
     protected $casts = [
-        'area' => 'json',
+        // 'area' => 'json',
         'thumb' => 'json'
     ];
 //     public function getAreaAttribute($author)
@@ -81,7 +84,19 @@ class Shop extends Model
              $this->attributes['thumb'] = json_encode($array);
        
     }
+    public function getAreaAttribute($val){
+        //var_dump(123123);
+        return json_encode(array(
+            'lat' => $this->attributes['lat'],
+            'lgt' => $this->attributes['lgt'],
+        ));
+    }
     public function setAreaAttribute($val){
-        $this->attributes['area'] = json_encode($val);
+        $this->attributes['lgt'] = $val['lgt'];
+        $this->attributes['lat'] = $val['lat'];
+    }
+    public function scopeAgentShops($query){
+        $agent = \Admin::user()->agent;
+        return $query->where('district_id',$agent->district_id);
     }
 }

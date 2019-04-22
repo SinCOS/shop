@@ -195,7 +195,7 @@ class AgentController extends Controller {
 		$form->saved(function ($form) {
 
 			if ($form->user['is_agent'] == 'on') {
-
+				
 				if (!\DB::table('admin_role_users')->where('user_id', $form->user_id)->first()) {
 					// $user = $form->model()->user;
 					// if(isEmpty($user->password)){

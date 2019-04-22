@@ -46,24 +46,25 @@ class HomeController extends Controller
          
             });
         }elseif (\Admin::user()->isRole('agent')) {
+
             $content->row(new Box('欢迎使用','~~~~~'));
            $content->row(function(Row $row){
                $row->column(4,function($column){
-                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',0)->count(), 'bill', 'warning', '/shops?status=0', '
+                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::AgentShops()->where('status',0)->count(), 'bill', 'warning', '/shops?status=0', '
                 待审核商家'));
                 
                });
                $row->column(4,function($column){
-                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::where('status',1)->count(), 'bill', 'success', '/shops?status=1', '
+                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Shop::AgentShops()->where('status',1)->count(), 'bill', 'success', '/shops?status=1', '
                 正常运营店铺'));
                 
                });
 
-               $row->column(4,function($column){
-                $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Activity::count(), 'bill', 'info', '/activity', '
-                活动统计'));
+            //    $row->column(4,function($column){
+            //     $column->append(new \Encore\Admin\Widgets\InfoBox(\App\Models\Activity::count(), 'bill', 'info', '/activity', '
+            //     活动统计'));
                 
-               });
+            //    });
            });
         }
         });

@@ -88,48 +88,43 @@ class ShopsController extends Controller {
 			if(\Admin::user()->isAdministrator()){
 				$filter->column(1/2,function($filter){
 					//\DB::table('district')->where('code',request('province_id',330000)->pluck('name','code'))\DB::table('district')->where('code',request('city_id',330400)
-					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',1)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
+					$filter->equal('province_id','省')->select(\DB::table('district')->where('parent_id',0)->pluck('name','code'))->load('city_id','/api/city')->default(330000);
 					$filter->equal('city_id','市')->select()->load('district_id','/api/city')->default(330400);
 					$filter->equal('district_id','区')->select();
 				});
 			}
 			
 		});
-	
 		$grid->tools(function ($tools) {
 			$tools->batch(function ($batch) {
 				$batch->disableDelete();
 			});
 		});
-		$grid->model()->whereNotIn('id',[1]);
 		$grid->actions(function($actions){
 			//$actions->append('<a href="/shops/{$actions->getKey()}" target="_blank"><i class="fa fa-eye"></i></a>');
 		});
 		$user = \Admin::user();
 		if($user->isRole('agent')){
 			
-			$id = \Admin::user()->agent->id;
-			$grid->model()->where('agent_id', $id);
+			$id = \Admin::user()->agent->district_id;
+			
+			$grid->model()->where('district_id', $id);
 		}
 		if($user->isRole('saller')){
-			$id = \Admin::user()->agent->id;
-			$grid->model()->where('saller_id', $id);
+			$id = \Admin::user()->agent->district_id;
+			$grid->model()->where('district_id', $id);
 		}
+
+		
 		$grid->disableExport();
 		$grid->disableCreateButton();
 		$grid->actions(function ($actions) {
-			if($actions->getKey() == 1){
-				
-			}
 			$actions->disableDelete();
 
 			// $actions->disableEdit();
 			// $actions->disableView();
 		});
-		//$grid->disableRowSelector();
-		$grid->id('Id')->display(function($id){
-			return $id == 1 ? '系统店铺' : $id;
-		});
+		$grid->id('Id');
 		$grid->column('user.name','管理用户');
 		$grid->title('店铺名');
 		$grid->logo('Logo')->image('',100,85);
@@ -249,7 +244,7 @@ class ShopsController extends Controller {
 		$form->text('title', '店铺名称')->rules('required|min:6')->help('最少6个字符');
 		$form->image('background_image', '背景图片')->uniqueName();
 		$form->select('status', '状态')->options(Shop::SHOP_STATUS);
-		$form->text('concat_phone', '联系电话');
+		$form->text('concat_phone', '联系电话'); 
 		$form->text('address', 'Address');
 		$form->text('contcat_people', '联系人');
 		$form->image('logo', '商铺logo')->uniqueName();
@@ -262,7 +257,7 @@ class ShopsController extends Controller {
 
 		$form->rate('serve_rating', '服务评分')->default(5.00);
 		$form->rate('speed_rating', '速度评分')->default(5.00);
-		$form->select('agent_id', '代理')->options(\App\Models\Agent::pluck('name','id'))->rules('required');
+		$form->select('agent_id', '代理')->options(\App\Models\Agent::pluck('name','id'));
 		// $form->select('work_id', '业务员');
 		// if(\Admin::user()->isAdministrator()){
 		// 	$form->select('cat_id', '店铺所属分类')->options(Category::selectOptions(function ($query) {

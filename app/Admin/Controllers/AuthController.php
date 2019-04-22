@@ -24,9 +24,6 @@ class AuthController extends BaseAuthController
 			'password' => 'required',
 			'captcha' =>'required|captcha',
 		
-		],[
-			'exists' => '用户不存在'
-
 		]);
 		if($validator->fails()){
 			return \Redirect::back()->withInput()->withErrors($validator);
