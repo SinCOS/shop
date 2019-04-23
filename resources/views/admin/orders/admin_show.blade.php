@@ -3,14 +3,15 @@
         <h3 class="box-title">订单流水号：{{ $order->no }}</h3>
         <div class="box-tools">
             <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-default"><i class="fa fa-list"></i> 列表</a>
+                <a href="/orders" class="btn btn-sm btn-default"><i class="fa fa-list"></i> 列表</a>
             </div>
         </div>
     </div>
     <div class="box-body">
         <table class="table table-bordered">
             <tbody>
-                <tr>
+              @if ($order->shop)
+                  <tr>
                     <td>店家:</td>
                     <td>{{$order->shop->title}}</td>
                     <td>电话</td>
@@ -18,6 +19,13 @@
                         {{$order->shop->concat_phone}}
                     </td>
                 </tr>
+              @else
+               <tr>
+                    <td>店家:</td>
+                    <td>系统充值</td>
+                    
+              @endif
+                
                 <tr>
                     <td>买家：</td>
                     <td>{{ $order->user->username }}</td>

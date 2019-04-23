@@ -84,6 +84,9 @@ class OrderController extends Controller
             $grid->no('订单流水号');
             // 展示关联关系的字段时，使用 column 方法
             $grid->column('shop.title','店铺')->display(function($val){
+               if($this->shop_id == 0){
+                   return '系统充值订单';
+               }
                 return "<a target='_blank' href='/shops/{$this->shop_id}'>" . $val . "</a>";
             });
             
