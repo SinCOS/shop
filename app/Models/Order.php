@@ -131,8 +131,8 @@ class Order extends Model
         return $no;
     }
    public function getAddressAttribute(){
-       
+
        if($this->attributes['address'] == 'N;'){ return [];}
-       return unserialize( preg_replace('!s:(\d+):"(.*?)";!se', '"s:".strlen("$2").":\"$2\";"', $this->attributes['address']))?:['zip' => ''];
+       return unserialize($this->attributes['address'])?:['zip' => ''];
    }
 }
