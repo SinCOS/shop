@@ -14,7 +14,15 @@
         <td>买家：</td>
         <td>{{ $order->user->username }}</td>
         <td>支付时间：</td>
-        {{-- <td>{{ $order->paid_at->format('Y-m-d H:i:s') }}</td> --}}
+
+        <td>
+          @if ($order->paid_at)
+              {{ $order->paid_at->format('Y-m-d H:i:s') }}
+          @else
+              未支付
+          @endif
+          
+        </td>
       </tr>
       <tr>
         <td>支付方式：</td>
@@ -23,9 +31,21 @@
         <td>{{ $order->payment_no }}</td>
       </tr>
       <tr>
-        <td>收货地址</td>
-        <td colspan="3">{{ $order->address['address'] }} {{ $order->address['zip'] }} {{ $order->address['contact_name'] }} {{ $order->address['contact_phone'] }}</td>
+        <td>收货人</td>
+        <td>{{$order->address['name']}}</td>
+        <td>联系电话</td>
+        <td>
+          {{$order->address['phone']}}
+        </td>
       </tr>
+      <tr>
+        <td>收货地址</td>
+        <td colspan="3">{{ $order->address['province'] }} {{ $order->address['city'] }} {{ $order->address['district'] }} 
+        <br>
+        {{ $order->address['address'] }}
+        </td>
+      </tr>
+      
       <tr>
         <td rowspan="{{ $order->items->count() + 1 }}">商品列表</td>
         <td>商品名称</td>
@@ -34,21 +54,26 @@
       </tr>
       @foreach($order->items as $item)
       <tr>
-        <td>{{ $item->product->title }} {{ $item->productSku->title }}</td>
+        <td>{{ $item->product->title }} 
+          @if ($item->productSku)
+              {{ $item->productSku->title }}
+          @endif
+         </td>
         <td>￥{{ $item->price }}</td>
         <td>{{ $item->amount }}</td>
       </tr>
       @endforeach
       <tr>
+        <td>发货状态：</td>
+        <td>{{ \App\Models\Order::$shipStatusMap[$order->ship_status] }}</td>
         <td>订单金额：</td>
         <td>￥{{ $order->total_amount }}</td>
         <!-- 这里也新增了一个发货状态 -->
-        <td>发货状态：</td>
-        <td>{{ \App\Models\Order::$shipStatusMap[$order->ship_status] }}</td>
+       
       </tr>
       <!-- 订单发货开始 -->
       <!-- 如果订单未发货，展示发货表单 -->
-      @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING)
+      @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING && $order->paid_at)
       @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_SUCCESS)
       <tr>
         <td colspan="4">
@@ -78,14 +103,16 @@
         </td>
       </tr>
       @endif
-      @else
+      @elseif($order->is_peisong == 1)
       <!-- 否则展示物流公司和物流单号 -->
       <tr>
         <td>派送员：</td>
-        <td>{{ $order->ship_data['express_company'] }}</td>
+        <td>{{ $order->ship_data['express_company'] }}
+        </td>
         <td>手机号：</td>
         <td>{{ $order->ship_data['express_no'] }}</td>
       </tr>
+      
       @endif
       <!-- 订单发货结束 -->
       @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_PENDING)

@@ -11,6 +11,7 @@ npm-debug.log
 yarn-error.log
 .env
 .DS_Store
+*/.DS_Store
 /public/js
 /public/css
 /public/fonts
@@ -19,3 +20,5 @@ ftpsync.settings
 sftp-config.json
 sftp.json
 /.vscode
+config/wxpay/*
+config/pay.php

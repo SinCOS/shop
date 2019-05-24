@@ -47,12 +47,14 @@ class Order extends Model
         'ship_status',//
         'ship_data',//购物信息
         'extra',//其他信
+        'is_peisong'
+        
     ];
 
     protected $casts = [
         'closed'    => 'boolean',
         'reviewed'  => 'boolean',
-        'address'   => 'json',
+        // 'address'   => 'array',
         'ship_data' => 'json',
         'extra'     => 'json',
     ];
@@ -87,7 +89,7 @@ class Order extends Model
     }
     public function items()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class,'order_id','no');
     }
 
     public function couponCode()
@@ -128,4 +130,7 @@ class Order extends Model
 
         return $no;
     }
+   public function getAddressAttribute(){
+       return unserialize($this->attributes['address'])?:['zip' => ''];
+   }
 }
