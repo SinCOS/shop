@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Routing\Router;
-Route::group(['domain' => 'business.lxrs.net'], function () {
+Route::group(['domain' => 'business.shaibibi.com'], function () {
 
     Admin::registerAuthRoutes();
     Route::get('/',function(){
@@ -15,7 +15,7 @@ Route::post('upload/file-input', '\App\Admin\Controllers\UploadController@upload
 Admin::registerAuthRoutes();
 
 Route::group([
-    'domain' => 'business.lxrs.net',
+    'domain' => 'business.shaibibi.com',
     'prefix' => '/api/v1',
      'namespace'     => config('admin.route.namespace'),
 
@@ -23,7 +23,7 @@ Route::group([
     $router->get('/tpl','TplController@show');
 });
 Route::group([
-    'domain' => 'business.lxrs.net',
+    'domain' => 'business.shaibibi.com',
     'prefix'        => config('admin.route.prefix'),
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),

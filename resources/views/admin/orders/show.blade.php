@@ -30,6 +30,8 @@
         <td>支付渠道单号：</td>
         <td>{{ $order->payment_no }}</td>
       </tr>
+      
+      @if($order->order==0)
       <tr>
         <td>收货人</td>
         <td>{{$order->address['name']}}</td>
@@ -38,13 +40,26 @@
           {{$order->address['phone']}}
         </td>
       </tr>
+
+      @endif
+      @if ($order->ordertype == 3)
       <tr>
-        <td>收货地址</td>
-        <td colspan="3">{{ $order->address['province'] }} {{ $order->address['city'] }} {{ $order->address['district'] }} 
-        <br>
-        {{ $order->address['address'] }}
+        <td>收货人</td>
+        <td>{{$order->address['name']}}</td>
+        <td>联系电话</td>
+        <td>
+          {{$order->address['phone']}}
         </td>
       </tr>
+             <tr>
+                <td>收货地址</td>
+                <td colspan="3">{{ $order->address['province'] }} {{ $order->address['city'] }} {{ $order->address['district'] }}
+                  <br>
+                  {{ $order->address['address'] }}
+                </td>
+              </tr>
+      @endif
+ 
       
       <tr>
         <td rowspan="{{ $order->items->count() + 1 }}">商品列表</td>

@@ -2,7 +2,7 @@
 use Illuminate\Routing\Router;
 // Admin::registerAuthRoutes();
 // Admin::registerAuthRoutes();
-Route::group(['domain' => 'hjt.lxrs.net'], function (Router $router) {
+Route::group(['domain' => 'admin888.shaibibi.com'], function (Router $router) {
 	Admin::registerAuthRoutes();
 	$router->get('/api/city',function(){
 		$provinceId = request()->get('q');
@@ -14,7 +14,7 @@ Route::group(['domain' => 'hjt.lxrs.net'], function (Router $router) {
 });
 
 Route::group([
-	'domain' => 'hjt.lxrs.net',
+	'domain' => 'admin888.shaibibi.com',
 	// 'namespace' => config('tenancy.route.namespace'),
 	'prefix'        => config('tenancy.route.prefix'),
     'middleware'    => config('tenancy.route.middleware')
