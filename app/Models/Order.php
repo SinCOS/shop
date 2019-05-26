@@ -24,6 +24,7 @@ class Order extends Model
         self::REFUND_STATUS_SUCCESS    => '退款成功',
         self::REFUND_STATUS_FAILED     => '退款失败',
     ];
+    
 
     public static $shipStatusMap = [
         self::SHIP_STATUS_PENDING   => '未发货',

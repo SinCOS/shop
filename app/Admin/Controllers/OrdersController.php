@@ -81,11 +81,12 @@ class OrdersController extends Controller
             });
             $grid->model()->where(
                 'shop_id','=',Admin::user()->shop_id)->orderBy('paid_at', 'desc');
-
             $grid->no('订单流水号');
             // 展示关联关系的字段时，使用 column 方法
             $grid->column('user.username', '买家');
+
             $grid->total_amount('总金额')->sortable();
+            $grid->created_at('下单时间')->sortable();
             $grid->paid_at('支付时间')->sortable();
             $grid->ship_status('发货状态')->display(function($value) {
                 return Order::$shipStatusMap[$value];

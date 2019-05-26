@@ -1,6 +1,9 @@
 <?php
 
 
+
+Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
+
 Route::resource('banner', 'BannerController');
 
 
@@ -37,7 +40,7 @@ Route::resource('banner', 'BannerController');
 
 // Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 // Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
-// Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
+Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
 // Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
 
 Auth::routes();

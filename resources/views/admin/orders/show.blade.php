@@ -22,6 +22,7 @@
               未支付
           @endif
           
+
         </td>
       </tr>
       <tr>
@@ -155,12 +156,12 @@ $(document).ready(function() {
   // 注意：Laravel-Admin 的 swal 是 v1 版本，参数和 v2 版本的不太一样
     swal({
       title: '输入拒绝退款理由',
-      type: 'input',
+      type: 'question',
       showCancelButton: true,
       closeOnConfirm: false,
       confirmButtonText: "确认",
       cancelButtonText: "取消",
-    }, function(inputValue){
+    }).then(function(inputValue){
       // 用户点击了取消，inputValue 为 false
       // === 是为了区分用户点击取消还是没有输入
       if (inputValue === false) {
@@ -170,6 +171,7 @@ $(document).ready(function() {
         swal('理由不能为空', '', 'error')
         return;
       }
+     
       // Laravel-Admin 没有 axios，使用 jQuery 的 ajax 方法来请求
       $.ajax({
         url: '{{ route('admin.orders.handle_refund', [$order->id]) }}',
@@ -204,11 +206,13 @@ $(document).ready(function() {
       closeOnConfirm: false,
       confirmButtonText: "确认",
       cancelButtonText: "取消",
-    }, function(ret){
+    }).then(function(ret){
+     
       // 用户点击取消，不做任何操作
       if (!ret) {
         return;
       }
+      
       $.ajax({
         url: '{{ route('admin.orders.handle_refund', [$order->id]) }}',
         type: 'POST',
