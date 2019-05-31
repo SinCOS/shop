@@ -32,7 +32,7 @@
         <td>{{ $order->payment_no }}</td>
       </tr>
       
-      @if($order->order==0)
+      @if($order->order==0 && !empty($order->address ))
       <tr>
         <td>收货人</td>
         <td>{{$order->address['name']}}</td>

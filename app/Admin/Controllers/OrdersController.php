@@ -80,14 +80,20 @@ class OrdersController extends Controller
                 $filter->equal('refund_status','退款状态')->select(Order::$refundStatusMap);
             });
             $grid->model()->where(
-                'shop_id','=',Admin::user()->shop_id)->orderBy('paid_at', 'desc');
+                'shop_id','=',Admin::user()->shop_id)->orderBy('created_at', 'desc');
             $grid->no('订单流水号');
             // 展示关联关系的字段时，使用 column 方法
             $grid->column('user.username', '买家');
 
+
             $grid->total_amount('总金额')->sortable();
             $grid->created_at('下单时间')->sortable();
             $grid->paid_at('支付时间')->sortable();
+
+            $grid->payment_method('支付方式')->display(function($value){
+                $payType =  ['alipay'=>'支付宝','wechat' =>'微信'];
+                return isset($payType[$value]) ?$payType[$value]:'其他';
+            });
             $grid->ship_status('发货状态')->display(function($value) {
                 return Order::$shipStatusMap[$value];
             });
