@@ -195,10 +195,10 @@ class ShopsController extends Controller {
 		$show->work_id('业务员');
 		$show->updated_at('最后更新');
 
-		$show->area('经纬度')->as(function ($areas) {
-			// var_dump($areas);
-			return $this->area['lat'] . ',' . $this->area['lgt'];
-		});
+		// $show->area('经纬度')->as(function ($areas) {
+		// 	// var_dump($areas);
+		// 	return $this->area['lat'] . ',' . $this->area['lgt'];
+		// });
 		return $show;
 	}
 	public function shopAudit(){

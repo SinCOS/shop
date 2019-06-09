@@ -32,4 +32,6 @@ Route::group([
 		$router->resource('agents','AgentController');
 		$router->resource('scategory','sCategoryController');
 		$router->resource('orders','OrderController');
+		$router->resource('withdraw','TiXianController');
+		$router->post('withdraw/do/{tixian}', 'TiXianController@withdraw')->name('tenancy.withdraw.do');
 });

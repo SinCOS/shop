@@ -70,7 +70,10 @@
       </tr>
       @foreach($order->items as $item)
       <tr>
-        <td>{{ $item->product->title }} 
+        <td>
+          {{$item->product->ssn}}
+        </td>
+        <td><img  width='40px' src='/uploads/{{ $item->product->image }}'/>{{ $item->product->title }} 
           @if ($item->productSku)
               {{ $item->productSku->title }}
           @endif
@@ -81,7 +84,7 @@
       @endforeach
       <tr>
         <td>发货状态：</td>
-        <td>{{ \App\Models\Order::$shipStatusMap[$order->ship_status] }}</td>
+        <td>{{ \App\Models\Order::$shipStatusMap[$order->status] }}</td>
         <td>订单金额：</td>
         <td>￥{{ $order->total_amount }}</td>
         <!-- 这里也新增了一个发货状态 -->
@@ -89,7 +92,7 @@
       </tr>
       <!-- 订单发货开始 -->
       <!-- 如果订单未发货，展示发货表单 -->
-      @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING && $order->paid_at)
+      @if($order->status === \App\Models\Order::SHIP_STATUS_PENDING && $order->paid_at)
       @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_SUCCESS)
       <tr>
         <td colspan="4">

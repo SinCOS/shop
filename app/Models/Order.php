@@ -13,10 +13,13 @@ class Order extends Model
     const REFUND_STATUS_SUCCESS = 'success';
     const REFUND_STATUS_FAILED = 'failed';
 
-    const SHIP_STATUS_PENDING = 'pending';
-    const SHIP_STATUS_DELIVERED = 'delivered';
-    const SHIP_STATUS_RECEIVED = 'received';
-
+    const SHIP_STATUS_PENDING = 1;
+    const SHIP_STATUS_DELIVERED = 2;
+    const SHIP_STATUS_RECEIVED = 3;
+    const SHIP_STATUS_CANCEL = -1;
+    const SHOP_STATUS_NORMAL = 0;
+    
+    
     public static $refundStatusMap = [
         self::REFUND_STATUS_PENDING    => '未退款',
         self::REFUND_STATUS_APPLIED    => '已申请退款',
@@ -27,9 +30,13 @@ class Order extends Model
     
 
     public static $shipStatusMap = [
+        self::SHIP_STATUS_CANCEL =>'取消订单',
+        self::SHOP_STATUS_NORMAL =>'未支付',
+        // self::SHOP_STATUS_PAID => '未发货',
         self::SHIP_STATUS_PENDING   => '未发货',
         self::SHIP_STATUS_DELIVERED => '已发货',
         self::SHIP_STATUS_RECEIVED  => '已收货',
+        
     ];
 
     protected $fillable = [
@@ -133,7 +140,8 @@ class Order extends Model
     }
    public function getAddressAttribute(){
 
-       if($this->attributes['address'] == 'N;'){ return [];}
-       return unserialize($this->attributes['address'])?:['zip' => ''];
+       if($this->attributes['address'] == 'N;' || empty($this->attributes['address']) || $this->attributes['address']=='无地址'){ return [];}
+       //var_dump($this->attributes['address']);
+       return @unserialize($this->attributes['address'])?:['zip' => ''];
    }
 }

@@ -55,7 +55,7 @@ class OrdersController extends Controller
         ]);
         // 将订单发货状态改为已发货，并存入物流信息
         $order->update([
-            'ship_status' => Order::SHIP_STATUS_DELIVERED,
+            'status' => Order::SHIP_STATUS_DELIVERED,
             // 我们在 Order 模型的 $casts 属性里指明了 ship_data 是一个数组
             // 因此这里可以直接把数组传过去
             'ship_data'   => $data, 
@@ -76,7 +76,7 @@ class OrdersController extends Controller
                 $filter->equal('no','订单号');
                 $filter->between('paid_at','支付时间')->datetime();
                 $filter->between('created_at','创建时间')->datetime();
-                $filter->equal('ship_status','配送状态')->select(Order::$shipStatusMap);
+                $filter->equal('status','配送状态')->select(Order::$shipStatusMap);
                 $filter->equal('refund_status','退款状态')->select(Order::$refundStatusMap);
             });
             $grid->model()->where(
@@ -94,11 +94,11 @@ class OrdersController extends Controller
                 $payType =  ['alipay'=>'支付宝','wechat' =>'微信'];
                 return isset($payType[$value]) ?$payType[$value]:'其他';
             });
-            $grid->ship_status('发货状态')->display(function($value) {
-                return Order::$shipStatusMap[$value];
+            $grid->status('状态')->display(function ($value) {
+                return isset(Order::$shipStatusMap[$value])? Order::$shipStatusMap[$value]:'错误' ;
             });
-            $grid->refund_status('退款状态')->display(function($value) {
-                return Order::$refundStatusMap[$value];
+            $grid->refund_status('退款状态')->display(function ($value) {
+                return isset(Order::$refundStatusMap[$value])?Order::$refundStatusMap[$value]:'错误';
             });
             // 禁用创建按钮，后台不需要创建订单
             $grid->disableCreateButton();

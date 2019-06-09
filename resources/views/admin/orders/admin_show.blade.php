@@ -39,34 +39,55 @@
                     <td>支付渠道单号：</td>
                     <td>{{ $order->payment_no }}</td>
                 </tr>
+                @if ($order->ordertype == 3)
                 <tr>
-                    <td>收货地址</td>
-                    <td colspan="3">{{ $order->address['address'] }} {{ $order->address['zip'] }} {{ $order->address['contact_name'] }} {{
-                        $order->address['contact_phone'] }}</td>
+                  <td>收货人</td>
+                  <td>{{$order->address['name']}}</td>
+                  <td>联系电话</td>
+                  <td>
+                    {{$order->address['phone']}}
+                  </td>
                 </tr>
+                       <tr>
+                          <td>收货地址</td>
+                          <td colspan="3">{{ $order->address['province'] }} {{ $order->address['city'] }} {{ $order->address['district'] }}
+                            <br>
+                            {{ $order->address['address'] }}
+                          </td>
+                        </tr>
+                @endif
                 <tr>
                     <td rowspan="{{ $order->items->count() + 1 }}">商品列表</td>
+                    
                     <td>商品名称</td>
                     <td>单价</td>
                     <td>数量</td>
-                </tr>
-                @foreach($order->items as $item)
-                <tr>
-                    <td>{{ $item->product->title }} {{ $item->productSku->title }}</td>
+                  </tr>
+                  @foreach($order->items as $item)
+                  <tr>
+                    
+                    <td>
+                      
+                      <img  width='40px' src='/uploads/{{ $item->product->image }}'/>{{ $item->product->title }} 
+                      @if ($item->productSku)
+                          {{ $item->productSku->title }}
+                      @endif
+
+                     </td>
                     <td>￥{{ $item->price }}</td>
                     <td>{{ $item->amount }}</td>
-                </tr>
-                @endforeach
+                  </tr>
+                  @endforeach
                 <tr>
                     <td>订单金额：</td>
                     <td>￥{{ $order->total_amount }}</td>
                     <!-- 这里也新增了一个发货状态 -->
                     <td>发货状态：</td>
-                    <td>{{ \App\Models\Order::$shipStatusMap[$order->ship_status] }}</td>
+                    <td>{{ \App\Models\Order::$shipStatusMap[$order->status] }}</td>
                 </tr>
                 <!-- 订单发货开始 -->
                 <!-- 如果订单未发货，展示发货表单 -->
-                @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING) {{-- @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_SUCCESS)
+                @if($order->status === \App\Models\Order::SHIP_STATUS_PENDING) {{-- @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_SUCCESS)
                 <tr>
                     <td colspan="4">
                         <form action="{{ route('admin.orders.ship', [$order->id]) }}" method="post" class="form-inline">
@@ -103,9 +124,10 @@
                         }}</td>
                     <td>
                         <!-- 如果订单退款状态是已申请，则展示处理按钮 -->
-                        @if($order->refund_status === \App\Models\Order::REFUND_STATUS_APPLIED)
+                        {{-- @if($order->refund_status === \App\Models\Order::REFUND_STATUS_APPLIED)
                         <button class="btn btn-sm btn-success" id="btn-refund-agree">同意</button>
-                        <button class="btn btn-sm btn-danger" id="btn-refund-disagree">不同意</button> @endif
+                        <button class="btn btn-sm btn-danger" id="btn-refund-disagree">不同意</button> 
+                        @endif --}}
                     </td>
                 </tr>
                 @endif
