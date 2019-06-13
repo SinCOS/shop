@@ -23,8 +23,8 @@ class DispatchVController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
-            ->description('description')
+            ->header('快递配送方案')
+            ->description()
             ->body($this->grid());
     }
 
@@ -53,8 +53,8 @@ class DispatchVController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('Edit')
-            ->description('description')
+            ->header('方案编辑')
+            ->description()
             ->body($this->form()->edit($id));
     }
 
@@ -83,7 +83,9 @@ class DispatchVController extends Controller
         $grid->model()->where('shop_id',\Admin::user()->shop_id);
         $grid->title('方案名');
         $grid->price('价格');
-
+        $grid->actions(function($actions){
+            $actions->disableView();
+        });
 
 
         return $grid;
@@ -117,10 +119,41 @@ class DispatchVController extends Controller
         $form->hidden('shop_id')->default(\Admin::user()->shop_id);
         $form->hasMany('areas','范围',function(Form\NestedForm $form){
             
-            $form->checkbox('area','省份')->options(\DB::table('district')->where('parent_id',0)->pluck('name','id'));
+            $form->checkbox('area','省份')->options(\DB::table('district')->where('parent_id',1)->pluck('name','id'));
             $form->currency('price','价格')->default(0);
         });
         $form->currency('price','价格')->default(0);
+        $form->tools(function (Form\Tools $tools) {
+
+            // Disable `List` btn.
+            //$tools->disableList();
+
+            // Disable `Delete` btn.
+            $tools->disableDelete();
+
+            // Disable `Veiw` btn.
+            $tools->disableView();
+
+            // Add a button, the argument can be a string, or an instance of the object that implements the Renderable or Htmlable interface
+            //$tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+        });
+        $form->footer(function ($footer) {
+
+            // disable reset btn
+            $footer->disableReset();
+
+            // disable submit btn
+            //$footer->disableSubmit();
+
+            // disable `View` checkbox
+            $footer->disableViewCheck();
+
+            // disable `Continue editing` checkbox
+            $footer->disableEditingCheck();
+
+            // disable `Continue Creating` checkbox
+            $footer->disableCreatingCheck();
+        });
         return $form;
     }
 }

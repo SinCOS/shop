@@ -87,7 +87,7 @@ class ActivityController extends Controller
         $grid->id('ID');
         $grid->title('活动名称');
         
-        $grid->created_at('Created at')->sortable();
+        $grid->created_at('日期')->sortable();
         //$grid->updated_at('Updated at');
         $grid->actions(function($actions){
             $actions->disableView();
